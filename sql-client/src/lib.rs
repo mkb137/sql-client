@@ -1,3 +1,10 @@
+#![allow(dead_code)]
+#![allow(unused_variables)]
+#![allow(unused_imports)]
+
+mod common;
+mod sql_connection_string;
+
 #[cfg(test)]
 mod tests {
     #[test]

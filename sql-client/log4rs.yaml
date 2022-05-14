@@ -1,0 +1,20 @@
+refresh_rate: 30 seconds
+appenders:
+  stdout:
+    kind: console
+    encoder:
+      pattern: "{M} {d(%Y-%m-%d %H:%M:%S%.3f)} - {m}{n}"
+  file:
+    kind: file
+    path: "../log/app.log"
+    append: false
+    encoder:
+      pattern: "{T} {M} {d(%Y-%m-%d %H:%M:%S)} - {m}{n}"
+root:
+  level: debug
+  appenders:
+    - stdout
+    - file
+loggers:
+  rust-mssql:
+    level: trace

@@ -9,3 +9,11 @@ repository = "https://github.com/mkb137/sql-client"
 keywords = ["sql", "mssql", "ms-sql"]
 
 [dependencies]
+anyhow = "1.0"
+log = "0.4"
+
+[dev-dependencies]
+hex = "0.4.3"
+log4rs = "1.0.0"
+test-macros = { path = "../test-macros" }
+test-utils = { path = "../test-utils" }
