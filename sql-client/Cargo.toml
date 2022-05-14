@@ -1,0 +1,11 @@
+[package]
+name = "sql-client"
+version = "0.1.0"
+edition = "2021"
+description = "A Rust implementation of the .NET Microsoft SQL Server client."
+license-file = "../LICENSE"
+readme = "../README.md"
+repository = "https://github.com/mkb137/sql-client"
+keywords = ["sql", "mssql", "ms-sql"]
+
+[dependencies]

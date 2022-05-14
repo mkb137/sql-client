@@ -1,0 +1,13 @@
+[package]
+name = "test-macros"
+version = "0.1.0"
+edition = "2021"
+description = "Macros used in the sql-client package."
+
+[lib]
+proc-macro = true
+
+[dependencies]
+darling = "0.14.0"
+quote = "1.0.18"
+syn = "1.0.91"
