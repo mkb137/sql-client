@@ -175,4 +175,77 @@ mod tests {
             Err(e) => assert!(false, "Expected: Ok, Actual: Err"),
         }
     }
+
+    #[rstest::rstest]
+    #[case("SqlPassword", SqlAuthenticationMethod::SqlPassword)]
+    #[case("Sql Password", SqlAuthenticationMethod::SqlPassword)]
+    #[case(
+        "ActiveDirectoryManagedIdentity",
+        SqlAuthenticationMethod::ActiveDirectoryManagedIdentity
+    )]
+    #[case(
+        "Active Directory Managed Identity",
+        SqlAuthenticationMethod::ActiveDirectoryManagedIdentity
+    )]
+    #[case(
+        "ActiveDirectoryIntegrated",
+        SqlAuthenticationMethod::ActiveDirectoryIntegrated
+    )]
+    #[case(
+        "Active Directory Integrated",
+        SqlAuthenticationMethod::ActiveDirectoryIntegrated
+    )]
+    #[case(
+        "ActiveDirectoryInteractive",
+        SqlAuthenticationMethod::ActiveDirectoryInteractive
+    )]
+    #[case(
+        "Active Directory Interactive",
+        SqlAuthenticationMethod::ActiveDirectoryInteractive
+    )]
+    #[case(
+        "ActiveDirectoryServicePrincipal",
+        SqlAuthenticationMethod::ActiveDirectoryServicePrincipal
+    )]
+    #[case(
+        "Active Directory Service Principal",
+        SqlAuthenticationMethod::ActiveDirectoryServicePrincipal
+    )]
+    #[case(
+        "ActiveDirectoryDeviceCodeFlow",
+        SqlAuthenticationMethod::ActiveDirectoryDeviceCodeFlow
+    )]
+    #[case(
+        "Active Directory Device Code Flow",
+        SqlAuthenticationMethod::ActiveDirectoryDeviceCodeFlow
+    )]
+    #[case(
+        "ActiveDirectoryManagedIdentity",
+        SqlAuthenticationMethod::ActiveDirectoryManagedIdentity
+    )]
+    #[case(
+        "Active Directory Managed Identity",
+        SqlAuthenticationMethod::ActiveDirectoryManagedIdentity
+    )]
+    #[case("ActiveDirectoryMSI", SqlAuthenticationMethod::ActiveDirectoryMSI)]
+    #[case("Active Directory MSI", SqlAuthenticationMethod::ActiveDirectoryMSI)]
+    #[case(
+        "ActiveDirectoryDefault",
+        SqlAuthenticationMethod::ActiveDirectoryDefault
+    )]
+    #[case(
+        "Active Directory Default",
+        SqlAuthenticationMethod::ActiveDirectoryDefault
+    )]
+    #[case("SqlCertificate", SqlAuthenticationMethod::SqlCertificate)]
+    #[case("Sql Certificate", SqlAuthenticationMethod::SqlCertificate)]
+    fn test_convert_to_authentication_method(
+        #[case] value: &str,
+        #[case] expected: SqlAuthenticationMethod,
+    ) {
+        match convert_to_authentication_method(value) {
+            Ok(actual) => assert_eq!(expected, actual),
+            Err(e) => assert!(false, "Expected: Ok, Actual: Err"),
+        }
+    }
 }
