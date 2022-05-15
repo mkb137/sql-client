@@ -92,101 +92,87 @@ fn convert_to_authentication_method(value: &str) -> anyhow::Result<SqlAuthentica
 #[cfg(test)]
 mod tests {
     use super::*;
+    use rstest;
 
-    #[test]
-    fn test_convert_to_boolean() {
-        assert_eq!(true, convert_to_boolean("yes").unwrap());
-        assert_eq!(true, convert_to_boolean("YES").unwrap());
-        assert_eq!(true, convert_to_boolean(" YeS ").unwrap());
-
-        assert_eq!(true, convert_to_boolean("true").unwrap());
-        assert_eq!(true, convert_to_boolean("TRUE").unwrap());
-        assert_eq!(true, convert_to_boolean(" TrUe ").unwrap());
-
-        assert_eq!(false, convert_to_boolean("no").unwrap());
-        assert_eq!(false, convert_to_boolean("NO").unwrap());
-        assert_eq!(false, convert_to_boolean(" No ").unwrap());
-
-        assert_eq!(false, convert_to_boolean("false").unwrap());
-        assert_eq!(false, convert_to_boolean("FALSE").unwrap());
-        assert_eq!(false, convert_to_boolean(" FaLsE").unwrap());
+    #[rstest::rstest]
+    #[case("yes", true)]
+    #[case("YES", true)]
+    #[case(" YeS ", true)]
+    #[case("true", true)]
+    #[case("TRUE", true)]
+    #[case(" TrUe ", true)]
+    #[case("no", false)]
+    #[case("NO", false)]
+    #[case("No", false)]
+    #[case(" No ", false)]
+    #[case("false", false)]
+    #[case("FALSE", false)]
+    #[case("False", false)]
+    #[case(" FaLsE ", false)]
+    fn test_convert_to_boolean(#[case] value: &str, #[case] expected: bool) {
+        match convert_to_boolean(value) {
+            Ok(actual) => assert_eq!(expected, actual),
+            Err(e) => assert!(false, "Expected: Ok, Actual: Err"),
+        }
     }
 
-    #[test]
-    fn test_convert_to_integrated_security() {
-        assert_eq!(true, convert_to_integrated_security("sspi").unwrap());
-        assert_eq!(true, convert_to_integrated_security("SSPI").unwrap());
-        assert_eq!(true, convert_to_integrated_security(" SsPi ").unwrap());
-
-        assert_eq!(true, convert_to_integrated_security("yes").unwrap());
-        assert_eq!(true, convert_to_integrated_security("YES").unwrap());
-        assert_eq!(true, convert_to_integrated_security(" YeS ").unwrap());
-
-        assert_eq!(true, convert_to_integrated_security("true").unwrap());
-        assert_eq!(true, convert_to_integrated_security("TRUE").unwrap());
-        assert_eq!(true, convert_to_integrated_security(" TrUe ").unwrap());
-
-        assert_eq!(false, convert_to_integrated_security("no").unwrap());
-        assert_eq!(false, convert_to_integrated_security("NO").unwrap());
-        assert_eq!(false, convert_to_integrated_security(" No ").unwrap());
-
-        assert_eq!(false, convert_to_integrated_security("false").unwrap());
-        assert_eq!(false, convert_to_integrated_security("FALSE").unwrap());
-        assert_eq!(false, convert_to_integrated_security(" FaLsE").unwrap());
+    #[rstest::rstest]
+    #[case("sspi", true)]
+    #[case("SSPI", true)]
+    #[case(" SsPi ", true)]
+    #[case("yes", true)]
+    #[case("YES", true)]
+    #[case(" YeS ", true)]
+    #[case("true", true)]
+    #[case("TRUE", true)]
+    #[case(" TrUe ", true)]
+    #[case("no", false)]
+    #[case("NO", false)]
+    #[case("No", false)]
+    #[case(" No ", false)]
+    #[case("false", false)]
+    #[case("FALSE", false)]
+    #[case("False", false)]
+    #[case(" FaLsE ", false)]
+    fn test_convert_to_integrated_security(#[case] value: &str, #[case] expected: bool) {
+        match convert_to_integrated_security(value) {
+            Ok(actual) => assert_eq!(expected, actual),
+            Err(e) => assert!(false, "Expected: Ok, Actual: Err"),
+        }
     }
-}
 
-#[test]
-fn test_convert_to_pool_blocking_period() {
-    assert_eq!(
-        PoolBlockingPeriod::Auto,
-        convert_to_pool_blocking_period("auto").unwrap(),
-        "auto"
-    );
-    assert_eq!(
-        PoolBlockingPeriod::Auto,
-        convert_to_pool_blocking_period("AUTO").unwrap()
-    );
-    assert_eq!(
-        PoolBlockingPeriod::Auto,
-        convert_to_pool_blocking_period(" AuTo ").unwrap()
-    );
+    #[rstest::rstest]
+    #[case("auto", PoolBlockingPeriod::Auto)]
+    #[case("AUTO", PoolBlockingPeriod::Auto)]
+    #[case(" AuTo ", PoolBlockingPeriod::Auto)]
+    #[case("alwaysblock", PoolBlockingPeriod::AlwaysBlock)]
+    #[case("AlwaysBlock", PoolBlockingPeriod::AlwaysBlock)]
+    #[case(" AlwaysBlock ", PoolBlockingPeriod::AlwaysBlock)]
+    #[case("neverblock", PoolBlockingPeriod::NeverBlock)]
+    #[case("NeverBlock", PoolBlockingPeriod::NeverBlock)]
+    #[case(" NeverBlock ", PoolBlockingPeriod::NeverBlock)]
+    fn test_convert_to_pool_blocking_period(
+        #[case] value: &str,
+        #[case] expected: PoolBlockingPeriod,
+    ) {
+        match convert_to_pool_blocking_period(value) {
+            Ok(actual) => assert_eq!(expected, actual),
+            Err(e) => assert!(false, "Expected: Ok, Actual: Err"),
+        }
+    }
 
-    assert_eq!(
-        PoolBlockingPeriod::AlwaysBlock,
-        convert_to_pool_blocking_period("alwaysblock").unwrap()
-    );
-    assert_eq!(
-        PoolBlockingPeriod::AlwaysBlock,
-        convert_to_pool_blocking_period(" AlwaysBlock ").unwrap()
-    );
-
-    assert_eq!(
-        PoolBlockingPeriod::NeverBlock,
-        convert_to_pool_blocking_period("neverblock").unwrap()
-    );
-    assert_eq!(
-        PoolBlockingPeriod::NeverBlock,
-        convert_to_pool_blocking_period(" NeverBlock ").unwrap()
-    );
-}
-
-#[test]
-fn test_convert_to_application_intent() {
-    assert_eq!(
-        ApplicationIntent::ReadWrite,
-        convert_to_application_intent("readwrite").unwrap()
-    );
-    assert_eq!(
-        ApplicationIntent::ReadWrite,
-        convert_to_application_intent("ReadWrite").unwrap()
-    );
-    assert_eq!(
-        ApplicationIntent::ReadOnly,
-        convert_to_application_intent("readonly").unwrap()
-    );
-    assert_eq!(
-        ApplicationIntent::ReadOnly,
-        convert_to_application_intent("ReadOnly").unwrap()
-    );
+    #[rstest::rstest]
+    #[case("readwrite", ApplicationIntent::ReadWrite)]
+    #[case("ReadWrite", ApplicationIntent::ReadWrite)]
+    #[case("readonly", ApplicationIntent::ReadOnly)]
+    #[case("ReadOnly", ApplicationIntent::ReadOnly)]
+    fn test_convert_to_application_intent(
+        #[case] value: &str,
+        #[case] expected: ApplicationIntent,
+    ) {
+        match convert_to_application_intent(value) {
+            Ok(actual) => assert_eq!(expected, actual),
+            Err(e) => assert!(false, "Expected: Ok, Actual: Err"),
+        }
+    }
 }

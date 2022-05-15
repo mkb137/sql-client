@@ -16,5 +16,7 @@ root:
     - stdout
     - file
 loggers:
+  rstest:
+    level: warn
   rust-mssql:
     level: trace
