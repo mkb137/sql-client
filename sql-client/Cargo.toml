@@ -14,6 +14,7 @@ log = "0.4"
 thiserror = "1.0"
 
 [dev-dependencies]
+ctor = "0.1"
 hex = "0.4.3"
 log4rs = "1.0.0"
 rstest = "0.12.0"

@@ -742,7 +742,7 @@ impl TryFrom<&str> for SqlConnectionStringBuilder {
                 let lowercase_key = trimmed_key.to_lowercase();
                 let keyword = lowercase_key.as_str();
                 // Get the value, trimmed.
-                let value = key.trim();
+                let value = value.trim();
                 log::debug!(" - got keyword '{:?}', value = '{:?}'", keyword, value);
                 // Check the keyword against the keywords we know
                 match keyword {
@@ -979,6 +979,7 @@ mod tests {
 
     #[rstest::rstest]
     #[case("Application Intent=ReadWrite", "Application Intent=ReadWrite")]
+    #[case("ApplicationIntent=ReadOnly", "Application Intent=ReadOnly")]
     fn test_connection_string_roundtrip(#[case] value: &str, #[case] expected: &str) {
         // Create a connection string builder
         let builder: SqlConnectionStringBuilder = value.try_into().unwrap();

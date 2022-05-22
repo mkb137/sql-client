@@ -16,10 +16,13 @@ impl TryFrom<&str> for ApplicationIntent {
         match value.trim().to_lowercase().as_str() {
             "readonly" => Ok(ApplicationIntent::ReadOnly),
             "readwrite" => Ok(ApplicationIntent::ReadWrite),
-            _ => Err(SqlClientError::UnsupportedValue(
-                "SqlClientError".to_string(),
-                value.to_string(),
-            )),
+            _ => {
+                log::warn!("Unsupported application intent '{:?}'", value);
+                Err(SqlClientError::UnsupportedValue(
+                    "SqlClientError".to_string(),
+                    value.to_string(),
+                ))
+            }
         }
     }
 }
