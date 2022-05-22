@@ -743,7 +743,7 @@ impl TryFrom<&str> for SqlConnectionStringBuilder {
                 let keyword = lowercase_key.as_str();
                 // Get the value, trimmed.
                 let value = value.trim();
-                log::debug!(" - got keyword '{:?}', value = '{:?}'", keyword, value);
+                log::debug!(" - got keyword {:?}, value = {:?}", keyword, value);
                 // Check the keyword against the keywords we know
                 match keyword {
                     "application intent" | "applicationintent" => {

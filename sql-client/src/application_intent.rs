@@ -17,7 +17,7 @@ impl TryFrom<&str> for ApplicationIntent {
             "readonly" => Ok(ApplicationIntent::ReadOnly),
             "readwrite" => Ok(ApplicationIntent::ReadWrite),
             _ => {
-                log::warn!("Unsupported application intent '{:?}'", value);
+                log::warn!("Unsupported application intent {:?}", value);
                 Err(SqlClientError::UnsupportedValue(
                     "SqlClientError".to_string(),
                     value.to_string(),
