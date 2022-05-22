@@ -7,6 +7,7 @@ use crate::{
     SqlConnectionColumnEncryptionSetting, SqlConnectionIpAddressPreference,
 };
 use std::collections::{HashMap, HashSet};
+use std::fmt::Display;
 
 // The available keywords
 enum Keyword {
@@ -85,6 +86,42 @@ const DEFAULT_USER_ID: Option<String> = None;
 const DEFAULT_WORKSTATION_ID: Option<String> = None;
 const DEFAULT_TRUST_SERVER_CERTIFICATE: bool = false;
 const DEFAULT_USER_INSTANCE: bool = false;
+
+/// Appends a keyword/value pair to a connection string.
+fn append(connection_string: &mut String, keyword: &str, value: &str) {
+    // If we have existing values...
+    if connection_string.len() > 0 {
+        // Add the value delimiter
+        connection_string.push(';');
+    }
+    // Add the keyword
+    connection_string.push_str(keyword);
+    // Add the delimiter
+    connection_string.push('=');
+    // Add the value
+    connection_string.push_str(value);
+}
+
+/// Appends a keyword/value pair to a connection string.
+fn append_str(connection_string: &mut String, keyword: &str, value: String) {
+    append(connection_string, keyword, value.as_str());
+}
+
+/// Appends a keyword/value pair to a connection string, formatting the bool correctly.
+fn append_bool(connection_string: &mut String, keyword: &str, value: bool) {
+    append(
+        connection_string,
+        keyword,
+        if value { "True" } else { "False" },
+    );
+}
+
+/// Appends a keyword/value pair to a connection string if the value is not "None".
+fn append_opt(connection_string: &mut String, keyword: &str, value: Option<String>) {
+    if let Some(v) = value {
+        append_str(connection_string, keyword, v);
+    }
+}
 
 /// Converts a true/false/yes/no string to a boolean.
 fn convert_to_boolean(value: &str) -> Result<bool, SqlClientError> {
@@ -187,6 +224,286 @@ struct SqlConnectionStringBuilder {
 }
 
 impl SqlConnectionStringBuilder {
+    //     /// Declares the application workload type when connecting to a database in an SQL Server Availability Group.
+    //     fn application_intent(self) -> ApplicationIntent {
+    //         self.application_intent
+    //     }
+    //
+    //     /// The name of the application associated with the connection string.
+    //     fn application_name(self) -> String {
+    //         self.application_name.clone()
+    //     }
+    //     /// Gets or sets a string that contains the name of the primary data file. This includes the full path name of an attachable database.
+    //     fn attach_db_filename(self) -> Option<String> {
+    //         self.attach_db_filename.clone()
+    //     }
+    //     /// ?
+    //     fn authentication(self) -> SqlAuthenticationMethod{
+    //         self.authentication
+    //     }
+    //     /// ?
+    //     fn column_encryption_setting(self) -> SqlConnectionColumnEncryptionSetting{
+    //         self.column_encryption_setting
+    //     }
+    //     /// The number of reconnections attempted after identifying that there was an idle connection failure. This must be an integer between 0 and 255. Default is 1. Set to 0 to disable reconnecting on idle connection failures.
+    //     fn connect_retry_count(self) -> u8{
+    //         self.connect_retry_count
+    //     }
+    //     /// Amount of time (in seconds) between each reconnection attempt after identifying that there was an idle connection failure. This must be an integer between 1 and 60. The default is 10 seconds.
+    //     fn connect_retry_interval(self) -> u8{
+    //         self.con
+    //     }
+    //     /// The length of time (in seconds) to wait for a connection to the server before terminating the attempt and generating an error.
+    //     fn connect_timeout(self) -> u16,
+    //     /// The length of time (in seconds) to wait for a command to the server before terminating the attempt and generating an error.
+    //     fn command_timeout(self) -> u16,
+    //     /// The SQL Server Language record name.
+    //     fn current_language(self) -> Option<String>,
+    //     /// The name or network address of the instance of SQL Server to connect to.
+    //     fn data_source(self) -> Option<String>,
+    //     /// ?
+    //     fn enclave_attestation_url(self) -> Option<String>,
+    //     /// Whether SQL Server uses SSL encryption for all data sent between the client and server if the server has a certificate installed.
+    //     fn encrypt(self) -> bool,
+    //     /// Whether the SQL Server connection pooler automatically enlists the connection in the creation thread's current transaction context.
+    //     fn enlist(self) -> bool,
+    //     /// The name or address of the partner server to connect to if the primary server is down.
+    //     fn failover_partner(self) -> Option<String>,
+    //     /// The name of the database associated with the connection.
+    //     fn initial_catalog(self) -> Option<String>,
+    //     /// Whether User ID and Password are specified in the connection (when false) or whether the current Windows account credentials are used for authentication (when true).
+    //     fn integrated_security(self) -> bool,
+    //     /// ?
+    //     fn ip_address_preference(self) -> SqlConnectionIpAddressPreference,
+    //     /// ??
+    //     fn load_balance_timeout(self) -> u16,
+    //     /// The maximum number of connections allowed in the connection pool for this specific connection string.
+    //     fn max_pool_size(self) -> u8,
+    //     /// The minimum number of connections allowed in the connection pool for this specific connection string.
+    //     fn min_pool_size(self) -> u8,
+    //     /// When true, an application can maintain multiple active result sets (MARS). When false, an application must process or cancel all result sets from one batch before it can execute any other batch on that connection.
+    //     fn multiple_active_result_sets(self) -> bool,
+    //     /// If your application is connecting to an Always On availability group (AG) or Always On Failover Cluster Instance (FCI) on different subnets, setting MultiSubnetFailover=true provides faster detection of and connection to the (currently) active server.
+    //     fn multi_subnet_failover(self) -> bool,
+    //     /// The size in bytes of the network packets used to communicate with an instance of SQL Server.
+    //     fn packet_size(self) -> u16,
+    //     /// The password for the SQL Server account.
+    //     fn password(self) -> Option<String>,
+    //     /// Indicates if security-sensitive information, such as the password or access token, should be returned as part of the connection string on a connection created with this SqlConnectionStringBuilder after that connection has ever been in an open state.
+    //     fn persist_security_info(self) -> bool,
+    //     /// Whether the connection will be pooled or explicitly opened every time that the connection is requested.
+    //     fn pooling(self) -> bool,
+    //     /// The blocking period behavior for a connection pool.
+    //     fn pool_blocking_period(self) -> PoolBlockingPeriod,
+    //     /// Whether replication is supported using the connection.
+    //     fn replication(self) -> bool,
+    //     /// Indicates how the connection maintains its association with an enlisted System.Transactions transaction.
+    //     fn transaction_binding(self) -> String,
+    //     /// Whether the channel will be encrypted while bypassing walking the certificate chain to validate trust.
+    //     fn trust_server_certificate(self) -> bool,
+    //     /// Indicates the type system the application expects.
+    //     fn type_system_version(self) -> String,
+    //     /// The user ID to be used when connecting to SQL Server.
+    //     fn user_id(self) -> Option<String>,
+    //     /// The name of the workstation connecting to SQL Server.
+    //     fn workstation_id(self) -> Option<String>,
+    //     /// Gets or sets a value that indicates whether to redirect the connection from the default SQL Server Express instance to a runtime-initiated instance running under the account of the caller.
+    //     fn user_instance(self) -> bool,
+
+    /// Returns the connection string.
+    fn connection_string(&self) -> String {
+        // Start with a blank connection string
+        let mut value = String::new();
+        // For each of the keywords that were overridden by the user...
+        for keyword in &self.keywords_in_use {
+            match keyword {
+                Keyword::ApplicationIntent => {
+                    append_str(
+                        &mut value,
+                        "Application Intent",
+                        self.application_intent.to_string(),
+                    );
+                }
+                Keyword::ApplicationName => {
+                    append_str(
+                        &mut value,
+                        "Application Name",
+                        self.application_name.clone(),
+                    );
+                }
+                Keyword::AttachDbFilename => {
+                    append_opt(
+                        &mut value,
+                        "AttachDbFilename",
+                        self.attach_db_filename.clone(),
+                    );
+                }
+                Keyword::Authentication => {
+                    append_str(
+                        &mut value,
+                        "Authentication",
+                        self.authentication.to_string(),
+                    );
+                }
+                Keyword::ColumnEncryptionSetting => append_str(
+                    &mut value,
+                    "Column Encryption Setting",
+                    self.column_encryption_setting.to_string(),
+                ),
+                Keyword::ConnectRetryCount => {
+                    append_str(
+                        &mut value,
+                        "Connect Retry Count",
+                        self.connect_retry_count.to_string(),
+                    );
+                }
+                Keyword::ConnectRetryInterval => append_str(
+                    &mut value,
+                    "Connect Retry Interval",
+                    self.connect_retry_interval.to_string(),
+                ),
+                Keyword::ConnectTimeout => append_str(
+                    &mut value,
+                    "Connect Timeout",
+                    self.connect_timeout.to_string(),
+                ),
+                Keyword::CommandTimeout => append_str(
+                    &mut value,
+                    "Command Timeout",
+                    self.command_timeout.to_string(),
+                ),
+                Keyword::CurrentLanguage => {
+                    append_opt(
+                        &mut value,
+                        "Current Language",
+                        self.current_language.clone(),
+                    );
+                }
+                Keyword::DataSource => {
+                    append_opt(&mut value, "Data Source", self.data_source.clone());
+                }
+                Keyword::EnclaveAttestationUrl => {
+                    append_opt(
+                        &mut value,
+                        "Enclave Attestation Url",
+                        self.enclave_attestation_url.clone(),
+                    );
+                }
+                Keyword::Encrypt => {
+                    append_bool(&mut value, "Encrypt", self.encrypt);
+                }
+                Keyword::Enlist => {
+                    append_bool(&mut value, "Enlist", self.enlist);
+                }
+                Keyword::FailoverPartner => {
+                    append_opt(
+                        &mut value,
+                        "Failover Partner",
+                        self.failover_partner.clone(),
+                    );
+                }
+                Keyword::InitialCatalog => {
+                    append_opt(&mut value, "Initial Catalog", self.initial_catalog.clone());
+                }
+                Keyword::IntegratedSecurity => {
+                    append_bool(&mut value, "Integrated Security", self.integrated_security);
+                }
+                Keyword::IpAddressPreference => {
+                    append_str(
+                        &mut value,
+                        "IP Address Preference",
+                        self.ip_address_preference.to_string(),
+                    );
+                }
+                Keyword::LoadBalanceTimeout => {
+                    append_str(
+                        &mut value,
+                        "Load Balance Timeout",
+                        self.load_balance_timeout.to_string(),
+                    );
+                }
+                Keyword::MaxPoolSize => {
+                    append_str(&mut value, "Max Pool Size", self.max_pool_size.to_string());
+                }
+                Keyword::MinPoolSize => {
+                    append_str(&mut value, "Min Pool Size", self.min_pool_size.to_string());
+                }
+                Keyword::MultipleActiveResultSets => {
+                    append_str(
+                        &mut value,
+                        "Multiple Active Result Sets",
+                        self.multiple_active_result_sets.to_string(),
+                    );
+                }
+                Keyword::MultiSubnetFailover => {
+                    append_str(
+                        &mut value,
+                        "Multi Subnet Failover",
+                        self.multi_subnet_failover.to_string(),
+                    );
+                }
+                Keyword::PacketSize => {
+                    append_str(&mut value, "Packet Size", self.packet_size.to_string());
+                }
+                Keyword::Password => {
+                    append_opt(&mut value, "Password", self.password.clone());
+                }
+                Keyword::PersistSecurityInfo => {
+                    append_bool(
+                        &mut value,
+                        "Persist Security Info",
+                        self.persist_security_info,
+                    );
+                }
+                Keyword::Pooling => {
+                    append_str(&mut value, "Pooling", self.pooling.to_string());
+                }
+                Keyword::PoolBlockingPeriod => {
+                    append_str(
+                        &mut value,
+                        "Pool Blocking Period",
+                        self.pool_blocking_period.to_string(),
+                    );
+                }
+                Keyword::Replication => {
+                    append_bool(&mut value, "Replication", self.replication);
+                }
+                Keyword::TransactionBinding => {
+                    append_str(
+                        &mut value,
+                        "Transaction Binding",
+                        self.transaction_binding.to_string(),
+                    );
+                }
+                Keyword::TypeSystemVersion => {
+                    append_str(
+                        &mut value,
+                        "Type System Version",
+                        self.type_system_version.to_string(),
+                    );
+                }
+                Keyword::UserId => {
+                    append_opt(&mut value, "User ID", self.user_id.clone());
+                }
+                Keyword::WorkstationId => {
+                    append_opt(&mut value, "Workstation ID", self.workstation_id.clone());
+                }
+                Keyword::TrustServerCertificate => {
+                    append_bool(
+                        &mut value,
+                        "Trust Server Certificate",
+                        self.trust_server_certificate,
+                    );
+                }
+                Keyword::UserInstance => {
+                    append_str(&mut value, "User Instance", self.user_instance.to_string());
+                }
+            }
+        }
+        // Return the value
+        value
+    }
+
     /// Declares the application workload type when connecting to a database in an SQL Server Availability Group.
     fn set_application_intent(&mut self, value: ApplicationIntent) {
         self.application_intent = value;
@@ -658,5 +975,16 @@ mod tests {
             Ok(actual) => assert_eq!(expected, actual),
             Err(e) => assert!(false, "Expected: Ok, Actual: Err"),
         }
+    }
+
+    #[rstest::rstest]
+    #[case("Application Intent=ReadWrite", "Application Intent=ReadWrite")]
+    fn test_connection_string_roundtrip(#[case] value: &str, #[case] expected: &str) {
+        // Create a connection string builder
+        let builder: SqlConnectionStringBuilder = value.try_into().unwrap();
+        // Have it build a string
+        let actual = builder.connection_string();
+        // Check the results
+        assert_eq!(expected, actual.as_str());
     }
 }
