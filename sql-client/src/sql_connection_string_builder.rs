@@ -429,14 +429,14 @@ impl TryFrom<&str> for SqlConnectionStringBuilder {
                 log::debug!(" - got keyword '{:?}', value = '{:?}'", keyword, value);
                 // Check the keyword against the keywords we know
                 match keyword {
-                    "application intent" => {
+                    "application intent" | "applicationintent" => {
                         let application_intent: ApplicationIntent = value.try_into()?;
                         connection_string_builder.set_application_intent(application_intent);
                     }
-                    "application name" => {
+                    "application name" | "app" => {
                         connection_string_builder.set_application_name(value.to_string());
                     }
-                    "attachdbfilename" => {
+                    "attachdbfilename" | "initial file name" => {
                         connection_string_builder.set_attach_db_filename(Some(value.to_string()));
                     }
                     "authentication" => {
@@ -454,29 +454,29 @@ impl TryFrom<&str> for SqlConnectionStringBuilder {
                         })?;
                         connection_string_builder.set_command_timeout(command_timeout);
                     }
-                    "connect retry count" => {
+                    "connect retry count" | "connectretrycount" => {
                         let connect_retry_count: u8 = value.parse().map_err(|_| {
                             SqlClientError::UnsupportedValue("u8".to_string(), value.to_string())
                         })?;
                         connection_string_builder.set_connect_retry_count(connect_retry_count);
                     }
-                    "connect retry interval" => {
+                    "connect retry interval" | "connectretryinterval" => {
                         let connect_retry_interval: u8 = value.parse().map_err(|_| {
                             SqlClientError::UnsupportedValue("u8".to_string(), value.to_string())
                         })?;
                         connection_string_builder
                             .set_connect_retry_interval(connect_retry_interval);
                     }
-                    "connect timeout" => {
+                    "connect timeout" | "connection timeout" | "timeout" => {
                         let connect_timeout: u16 = value.parse().map_err(|_| {
                             SqlClientError::UnsupportedValue("u16".to_string(), value.to_string())
                         })?;
                         connection_string_builder.set_connect_timeout(connect_timeout);
                     }
-                    "current language" => {
+                    "current language" | "language" => {
                         connection_string_builder.set_current_language(Some(value.to_string()));
                     }
-                    "data source" => {
+                    "data source" | "addr" | "address" | "network address" | "server" => {
                         connection_string_builder.set_data_source(Some(value.to_string()));
                     }
                     "enclave attestation url" => {
@@ -494,19 +494,19 @@ impl TryFrom<&str> for SqlConnectionStringBuilder {
                     "failover partner" => {
                         connection_string_builder.set_failover_partner(Some(value.to_string()));
                     }
-                    "initial catalog" => {
+                    "initial catalog" | "database" => {
                         connection_string_builder.set_initial_catalog(Some(value.to_string()));
                     }
-                    "integrated security" => {
+                    "integrated security" | "trusted_connection" => {
                         let integrated_security = convert_to_integrated_security(value)?;
                         connection_string_builder.set_integrated_security(integrated_security);
                     }
-                    "IP Address Preference" => {
+                    "ip address preference" | "ipaddresspreference" => {
                         let ip_address_preference: SqlConnectionIpAddressPreference =
                             value.try_into()?;
                         connection_string_builder.set_ip_address_preference(ip_address_preference);
                     }
-                    "load balance timeout" => {
+                    "load balance timeout" | "connection lifetime" => {
                         let load_balance_timeout: u16 = value.parse().map_err(|_| {
                             SqlClientError::UnsupportedValue("u16".to_string(), value.to_string())
                         })?;
@@ -524,12 +524,12 @@ impl TryFrom<&str> for SqlConnectionStringBuilder {
                         })?;
                         connection_string_builder.set_min_pool_size(min_pool_size);
                     }
-                    "multiple active result sets" => {
+                    "multiple active result sets" | "multipleactiveresultsets" => {
                         let multiple_active_result_sets = convert_to_boolean(value)?;
                         connection_string_builder
                             .set_multiple_active_result_sets(multiple_active_result_sets);
                     }
-                    "multi subnet failover" => {
+                    "multi subnet failover" | "multisubnetfailover" => {
                         let multi_subnet_failover = convert_to_boolean(value)?;
                         connection_string_builder.set_multi_subnet_failover(multi_subnet_failover);
                     }
@@ -539,10 +539,10 @@ impl TryFrom<&str> for SqlConnectionStringBuilder {
                         })?;
                         connection_string_builder.set_packet_size(packet_size);
                     }
-                    "password" => {
+                    "password" | "pwd" => {
                         connection_string_builder.set_password(Some(value.to_string()));
                     }
-                    "persist security info" => {
+                    "persist security info" | "persistsecurityinfo" => {
                         let persist_security_info = convert_to_boolean(value)?;
                         connection_string_builder.set_persist_security_info(persist_security_info);
                     }
@@ -550,7 +550,7 @@ impl TryFrom<&str> for SqlConnectionStringBuilder {
                         let pooling = convert_to_boolean(value)?;
                         connection_string_builder.set_pooling(pooling);
                     }
-                    "pool blocking period" => {
+                    "pool blocking period" | "poolblockingperiod" => {
                         let pool_blocking_period: PoolBlockingPeriod = value.try_into()?;
                         connection_string_builder.set_pool_blocking_period(pool_blocking_period);
                     }
@@ -561,19 +561,19 @@ impl TryFrom<&str> for SqlConnectionStringBuilder {
                     "transaction binding" => {
                         connection_string_builder.set_transaction_binding(value.to_string());
                     }
-                    "type system version" => {
-                        connection_string_builder.set_type_system_version(value.to_string());
-                    }
-                    "user id" => {
-                        connection_string_builder.set_user_id(Some(value.to_string()));
-                    }
-                    "workstation id" => {
-                        connection_string_builder.set_workstation_id(Some(value.to_string()));
-                    }
-                    "trust server certificate" => {
+                    "trust server certificate" | "trustservercertificate" => {
                         let trust_server_certificate = convert_to_boolean(value)?;
                         connection_string_builder
                             .set_trust_server_certificate(trust_server_certificate);
+                    }
+                    "type system version" => {
+                        connection_string_builder.set_type_system_version(value.to_string());
+                    }
+                    "user id" | "uid" | "user" => {
+                        connection_string_builder.set_user_id(Some(value.to_string()));
+                    }
+                    "workstation id" | "wsid" => {
+                        connection_string_builder.set_workstation_id(Some(value.to_string()));
                     }
                     "user instance" => {
                         let user_instance = convert_to_boolean(value)?;

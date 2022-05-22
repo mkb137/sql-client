@@ -9,6 +9,7 @@ mod sql_client_error;
 mod sql_column_encryption_setting;
 mod sql_connection_ip_address_preference;
 mod sql_connection_string_builder;
+
 pub(crate) use application_intent::ApplicationIntent;
 pub(crate) use pool_blocking_period::PoolBlockingPeriod;
 pub(crate) use sql_authentication_method::SqlAuthenticationMethod;
