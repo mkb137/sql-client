@@ -86,18 +86,6 @@ const DEFAULT_WORKSTATION_ID: Option<String> = None;
 const DEFAULT_TRUST_SERVER_CERTIFICATE: bool = false;
 const DEFAULT_USER_INSTANCE: bool = false;
 
-/// Converts a string value to an application intent.
-fn convert_to_application_intent(value: &str) -> Result<ApplicationIntent, SqlClientError> {
-    match value.trim().to_lowercase().as_str() {
-        "readonly" => Ok(ApplicationIntent::ReadOnly),
-        "readwrite" => Ok(ApplicationIntent::ReadWrite),
-        _ => Err(SqlClientError::UnsupportedValue(
-            "SqlClientError".to_string(),
-            value.to_string(),
-        )),
-    }
-}
-
 /// Converts a true/false/yes/no string to a boolean.
 fn convert_to_boolean(value: &str) -> Result<bool, SqlClientError> {
     match value.trim().to_lowercase().as_str() {
@@ -110,97 +98,13 @@ fn convert_to_boolean(value: &str) -> Result<bool, SqlClientError> {
     }
 }
 
-fn convert_to_column_encryption_setting(
-    value: &str,
-) -> Result<SqlConnectionColumnEncryptionSetting, SqlClientError> {
-    match value.trim().to_lowercase().as_str() {
-        "disabled" => Ok(SqlConnectionColumnEncryptionSetting::Disabled),
-        "enabled" => Ok(SqlConnectionColumnEncryptionSetting::Enabled),
-        _ => Err(SqlClientError::UnsupportedValue(
-            "SqlConnectionColumnEncryptionSetting".to_string(),
-            value.to_string(),
-        )),
-    }
-}
-
+/// Converts a true/false/yes/no/sspi string to a boolean.
 fn convert_to_integrated_security(value: &str) -> Result<bool, SqlClientError> {
     match value.trim().to_lowercase().as_str() {
         "true" | "yes" | "sspi" => Ok(true),
         "false" | "no" => Ok(false),
         _ => Err(SqlClientError::UnsupportedValue(
             "Integrated Security".to_string(),
-            value.to_string(),
-        )),
-    }
-}
-
-fn convert_to_ip_address_preference(
-    value: &str,
-) -> Result<SqlConnectionIpAddressPreference, SqlClientError> {
-    match value.trim().to_lowercase().as_str() {
-        "ipv4first" => Ok(SqlConnectionIpAddressPreference::IPv4First),
-        "ipv6first" => Ok(SqlConnectionIpAddressPreference::IPv6First),
-        "useplatformdefault" => Ok(SqlConnectionIpAddressPreference::UsePlatformDefault),
-        _ => Err(SqlClientError::UnsupportedValue(
-            "IP Address Preference".to_string(),
-            value.to_string(),
-        )),
-    }
-}
-
-fn convert_to_pool_blocking_period(value: &str) -> Result<PoolBlockingPeriod, SqlClientError> {
-    match value.trim().to_lowercase().as_str() {
-        "auto" => Ok(PoolBlockingPeriod::Auto),
-        "alwaysblock" => Ok(PoolBlockingPeriod::AlwaysBlock),
-        "neverblock" => Ok(PoolBlockingPeriod::NeverBlock),
-        _ => Err(SqlClientError::UnsupportedValue(
-            "Pool blocking period".to_string(),
-            value.to_string(),
-        )),
-    }
-}
-fn convert_to_authentication_method(
-    value: &str,
-) -> Result<SqlAuthenticationMethod, SqlClientError> {
-    match value.trim().to_lowercase().as_str() {
-        "sql password" | "sqlpassword" => Ok(SqlAuthenticationMethod::SqlPassword),
-
-        "active directory password" | "activedirectorypassword" => {
-            Ok(SqlAuthenticationMethod::ActiveDirectoryPassword)
-        }
-
-        "active directory managed identity" | "activedirectorymanagedidentity" => {
-            Ok(SqlAuthenticationMethod::ActiveDirectoryManagedIdentity)
-        }
-
-        "active directory integrated" | "activedirectoryintegrated" => {
-            Ok(SqlAuthenticationMethod::ActiveDirectoryIntegrated)
-        }
-
-        "active directory interactive" | "activedirectoryinteractive" => {
-            Ok(SqlAuthenticationMethod::ActiveDirectoryInteractive)
-        }
-
-        "active directory service principal" | "activedirectoryserviceprincipal" => {
-            Ok(SqlAuthenticationMethod::ActiveDirectoryServicePrincipal)
-        }
-
-        "active directory device code flow" | "activedirectorydevicecodeflow" => {
-            Ok(SqlAuthenticationMethod::ActiveDirectoryDeviceCodeFlow)
-        }
-
-        "active directory msi" | "activedirectorymsi" => {
-            Ok(SqlAuthenticationMethod::ActiveDirectoryMSI)
-        }
-
-        "active directory default" | "activedirectorydefault" => {
-            Ok(SqlAuthenticationMethod::ActiveDirectoryDefault)
-        }
-
-        "sql certificate" | "sqlcertificate" => Ok(SqlAuthenticationMethod::SqlCertificate),
-
-        _ => Err(SqlClientError::UnsupportedValue(
-            "Authentication Method".to_string(),
             value.to_string(),
         )),
     }
@@ -526,7 +430,7 @@ impl TryFrom<&str> for SqlConnectionStringBuilder {
                 // Check the keyword against the keywords we know
                 match keyword {
                     "application intent" => {
-                        let application_intent = convert_to_application_intent(value)?;
+                        let application_intent: ApplicationIntent = value.try_into()?;
                         connection_string_builder.set_application_intent(application_intent);
                     }
                     "application name" => {
@@ -539,8 +443,8 @@ impl TryFrom<&str> for SqlConnectionStringBuilder {
                         connection_string_builder.set_attach_db_filename(Some(value.to_string()));
                     }
                     "column encryption setting" => {
-                        let column_encrpytion_setting =
-                            convert_to_column_encryption_setting(value)?;
+                        let column_encrpytion_setting: SqlConnectionColumnEncryptionSetting =
+                            value.try_into()?;
                         connection_string_builder
                             .set_column_encryption_setting(column_encrpytion_setting);
                     }
@@ -598,7 +502,8 @@ impl TryFrom<&str> for SqlConnectionStringBuilder {
                         connection_string_builder.set_integrated_security(integrated_security);
                     }
                     "IP Address Preference" => {
-                        let ip_address_preference = convert_to_ip_address_preference(value)?;
+                        let ip_address_preference: SqlConnectionIpAddressPreference =
+                            value.try_into()?;
                         connection_string_builder.set_ip_address_preference(ip_address_preference);
                     }
                     "load balance timeout" => {
@@ -646,7 +551,7 @@ impl TryFrom<&str> for SqlConnectionStringBuilder {
                         connection_string_builder.set_pooling(pooling);
                     }
                     "pool blocking period" => {
-                        let pool_blocking_period = convert_to_pool_blocking_period(value)?;
+                        let pool_blocking_period: PoolBlockingPeriod = value.try_into()?;
                         connection_string_builder.set_pool_blocking_period(pool_blocking_period);
                     }
                     "replication" => {
@@ -750,114 +655,6 @@ mod tests {
     #[case(" FaLsE ", false)]
     fn test_convert_to_integrated_security(#[case] value: &str, #[case] expected: bool) {
         match convert_to_integrated_security(value) {
-            Ok(actual) => assert_eq!(expected, actual),
-            Err(e) => assert!(false, "Expected: Ok, Actual: Err"),
-        }
-    }
-
-    #[rstest::rstest]
-    #[case("auto", PoolBlockingPeriod::Auto)]
-    #[case("AUTO", PoolBlockingPeriod::Auto)]
-    #[case(" AuTo ", PoolBlockingPeriod::Auto)]
-    #[case("alwaysblock", PoolBlockingPeriod::AlwaysBlock)]
-    #[case("AlwaysBlock", PoolBlockingPeriod::AlwaysBlock)]
-    #[case(" AlwaysBlock ", PoolBlockingPeriod::AlwaysBlock)]
-    #[case("neverblock", PoolBlockingPeriod::NeverBlock)]
-    #[case("NeverBlock", PoolBlockingPeriod::NeverBlock)]
-    #[case(" NeverBlock ", PoolBlockingPeriod::NeverBlock)]
-    fn test_convert_to_pool_blocking_period(
-        #[case] value: &str,
-        #[case] expected: PoolBlockingPeriod,
-    ) {
-        match convert_to_pool_blocking_period(value) {
-            Ok(actual) => assert_eq!(expected, actual),
-            Err(e) => assert!(false, "Expected: Ok, Actual: Err"),
-        }
-    }
-
-    #[rstest::rstest]
-    #[case("readwrite", ApplicationIntent::ReadWrite)]
-    #[case("ReadWrite", ApplicationIntent::ReadWrite)]
-    #[case("readonly", ApplicationIntent::ReadOnly)]
-    #[case("ReadOnly", ApplicationIntent::ReadOnly)]
-    fn test_convert_to_application_intent(
-        #[case] value: &str,
-        #[case] expected: ApplicationIntent,
-    ) {
-        match convert_to_application_intent(value) {
-            Ok(actual) => assert_eq!(expected, actual),
-            Err(e) => assert!(false, "Expected: Ok, Actual: Err"),
-        }
-    }
-
-    #[rstest::rstest]
-    #[case("SqlPassword", SqlAuthenticationMethod::SqlPassword)]
-    #[case("Sql Password", SqlAuthenticationMethod::SqlPassword)]
-    #[case(
-        "ActiveDirectoryManagedIdentity",
-        SqlAuthenticationMethod::ActiveDirectoryManagedIdentity
-    )]
-    #[case(
-        "Active Directory Managed Identity",
-        SqlAuthenticationMethod::ActiveDirectoryManagedIdentity
-    )]
-    #[case(
-        "ActiveDirectoryIntegrated",
-        SqlAuthenticationMethod::ActiveDirectoryIntegrated
-    )]
-    #[case(
-        "Active Directory Integrated",
-        SqlAuthenticationMethod::ActiveDirectoryIntegrated
-    )]
-    #[case(
-        "ActiveDirectoryInteractive",
-        SqlAuthenticationMethod::ActiveDirectoryInteractive
-    )]
-    #[case(
-        "Active Directory Interactive",
-        SqlAuthenticationMethod::ActiveDirectoryInteractive
-    )]
-    #[case(
-        "ActiveDirectoryServicePrincipal",
-        SqlAuthenticationMethod::ActiveDirectoryServicePrincipal
-    )]
-    #[case(
-        "Active Directory Service Principal",
-        SqlAuthenticationMethod::ActiveDirectoryServicePrincipal
-    )]
-    #[case(
-        "ActiveDirectoryDeviceCodeFlow",
-        SqlAuthenticationMethod::ActiveDirectoryDeviceCodeFlow
-    )]
-    #[case(
-        "Active Directory Device Code Flow",
-        SqlAuthenticationMethod::ActiveDirectoryDeviceCodeFlow
-    )]
-    #[case(
-        "ActiveDirectoryManagedIdentity",
-        SqlAuthenticationMethod::ActiveDirectoryManagedIdentity
-    )]
-    #[case(
-        "Active Directory Managed Identity",
-        SqlAuthenticationMethod::ActiveDirectoryManagedIdentity
-    )]
-    #[case("ActiveDirectoryMSI", SqlAuthenticationMethod::ActiveDirectoryMSI)]
-    #[case("Active Directory MSI", SqlAuthenticationMethod::ActiveDirectoryMSI)]
-    #[case(
-        "ActiveDirectoryDefault",
-        SqlAuthenticationMethod::ActiveDirectoryDefault
-    )]
-    #[case(
-        "Active Directory Default",
-        SqlAuthenticationMethod::ActiveDirectoryDefault
-    )]
-    #[case("SqlCertificate", SqlAuthenticationMethod::SqlCertificate)]
-    #[case("Sql Certificate", SqlAuthenticationMethod::SqlCertificate)]
-    fn test_convert_to_authentication_method(
-        #[case] value: &str,
-        #[case] expected: SqlAuthenticationMethod,
-    ) {
-        match convert_to_authentication_method(value) {
             Ok(actual) => assert_eq!(expected, actual),
             Err(e) => assert!(false, "Expected: Ok, Actual: Err"),
         }
