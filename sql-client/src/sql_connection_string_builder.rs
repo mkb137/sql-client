@@ -601,171 +601,205 @@ impl SqlConnectionStringBuilder {
         self.application_intent = value;
         self.keywords_in_use.push(Keyword::ApplicationIntent);
     }
+
     /// The name of the application associated with the connection string.
     pub fn set_application_name(&mut self, value: String) {
         self.application_name = value;
         self.keywords_in_use.push(Keyword::ApplicationName);
     }
+
     /// Gets or sets a string that contains the name of the primary data file. This includes the full path name of an attachable database.
     pub fn set_attach_db_filename(&mut self, value: Option<String>) {
         self.attach_db_filename = value;
         self.keywords_in_use.push(Keyword::AttachDbFilename);
     }
+
     /// ?
     pub fn set_authentication(&mut self, value: SqlAuthenticationMethod) {
         self.authentication = value;
         self.keywords_in_use.push(Keyword::Authentication);
     }
+
     /// ?
     pub fn set_column_encryption_setting(&mut self, value: SqlConnectionColumnEncryptionSetting) {
         self.column_encryption_setting = value;
         self.keywords_in_use.push(Keyword::ColumnEncryptionSetting);
     }
+
     /// The length of time (in seconds) to wait for a command to the server before terminating the attempt and generating an error.
     pub fn set_command_timeout(&mut self, value: u16) {
         self.command_timeout = value;
         self.keywords_in_use.push(Keyword::CommandTimeout);
     }
+
     /// The number of reconnections attempted after identifying that there was an idle connection failure. This must be an integer between 0 and 255. Default is 1. Set to 0 to disable reconnecting on idle connection failures.
     pub fn set_connect_retry_count(&mut self, value: u8) {
         self.connect_retry_count = value;
         self.keywords_in_use.push(Keyword::ConnectRetryCount);
     }
+
     /// Amount of time (in seconds) between each reconnection attempt after identifying that there was an idle connection failure. This must be an integer between 1 and 60. The default is 10 seconds.
     pub fn set_connect_retry_interval(&mut self, value: u8) {
         self.connect_retry_interval = value;
         self.keywords_in_use.push(Keyword::ConnectRetryInterval);
     }
+
     /// The length of time (in seconds) to wait for a connection to the server before terminating the attempt and generating an error.
     pub fn set_connect_timeout(&mut self, value: u16) {
         self.connect_timeout = value;
         self.keywords_in_use.push(Keyword::ConnectTimeout);
     }
+
     /// The SQL Server Language record name.
     pub fn set_current_language(&mut self, value: Option<String>) {
         self.current_language = value;
         self.keywords_in_use.push(Keyword::CurrentLanguage);
     }
+
     /// The name or network address of the instance of SQL Server to connect to.
     pub fn set_data_source(&mut self, value: Option<String>) {
         self.data_source = value;
         self.keywords_in_use.push(Keyword::DataSource);
     }
+
     /// ?
     pub fn set_enclave_attestation_url(&mut self, value: Option<String>) {
         self.enclave_attestation_url = value;
         self.keywords_in_use.push(Keyword::EnclaveAttestationUrl);
     }
+
     /// Whether SQL Server uses SSL encryption for all data sent between the client and server if the server has a certificate installed.
     pub fn set_encrypt(&mut self, value: bool) {
         self.encrypt = value;
         self.keywords_in_use.push(Keyword::Encrypt);
     }
+
     /// Whether the SQL Server connection pooler automatically enlists the connection in the creation thread's current transaction context.
     pub fn set_enlist(&mut self, value: bool) {
         self.enlist = value;
         self.keywords_in_use.push(Keyword::Enlist);
     }
+
     /// The name or address of the partner server to connect to if the primary server is down.
     pub fn set_failover_partner(&mut self, value: Option<String>) {
         self.failover_partner = value;
         self.keywords_in_use.push(Keyword::FailoverPartner);
     }
+
     /// The name of the database associated with the connection.
     pub fn set_initial_catalog(&mut self, value: Option<String>) {
         self.initial_catalog = value;
         self.keywords_in_use.push(Keyword::InitialCatalog);
     }
+
     /// Whether User ID and Password are specified in the connection (when false) or whether the current Windows account credentials are used for authentication (when true).
     pub fn set_integrated_security(&mut self, value: bool) {
         self.integrated_security = value;
         self.keywords_in_use.push(Keyword::IntegratedSecurity);
     }
+
     /// ?
     pub fn set_ip_address_preference(&mut self, value: SqlConnectionIpAddressPreference) {
         self.ip_address_preference = value;
         self.keywords_in_use.push(Keyword::IpAddressPreference);
     }
+
     /// ??
     pub fn set_load_balance_timeout(&mut self, value: u16) {
         self.load_balance_timeout = value;
         self.keywords_in_use.push(Keyword::LoadBalanceTimeout);
     }
+
     /// The maximum number of connections allowed in the connection pool for this specific connection string.
     pub fn set_max_pool_size(&mut self, value: u8) {
         self.max_pool_size = value;
         self.keywords_in_use.push(Keyword::MaxPoolSize);
     }
+
     /// The minimum number of connections allowed in the connection pool for this specific connection string.
     pub fn set_min_pool_size(&mut self, value: u8) {
         self.min_pool_size = value;
         self.keywords_in_use.push(Keyword::MinPoolSize);
     }
+
     /// When true, an application can maintain multiple active result sets (MARS). When false, an application must process or cancel all result sets from one batch before it can execute any other batch on that connection.
     pub fn set_multiple_active_result_sets(&mut self, value: bool) {
         self.multiple_active_result_sets = value;
         self.keywords_in_use.push(Keyword::MultipleActiveResultSets);
     }
+
     /// If your application is connecting to an Always On availability group (AG) or Always On Failover Cluster Instance (FCI) on different subnets, setting MultiSubnetFailover=true provides faster detection of and connection to the (currently) active server.
     pub fn set_multi_subnet_failover(&mut self, value: bool) {
         self.multi_subnet_failover = value;
         self.keywords_in_use.push(Keyword::MultiSubnetFailover);
     }
+
     /// The size in bytes of the network packets used to communicate with an instance of SQL Server.
     pub fn set_packet_size(&mut self, value: u16) {
         self.packet_size = value;
         self.keywords_in_use.push(Keyword::PacketSize);
     }
+
     /// The password for the SQL Server account.
     pub fn set_password(&mut self, value: Option<SecStr>) {
         self.password = value;
         self.keywords_in_use.push(Keyword::Password);
     }
+
     /// Indicates if security-sensitive information, such as the password or access token, should be returned as part of the connection string on a connection created with this SqlConnectionStringBuilder after that connection has ever been in an open state.
     pub fn set_persist_security_info(&mut self, value: bool) {
         self.persist_security_info = value;
         self.keywords_in_use.push(Keyword::PersistSecurityInfo);
     }
+
     /// Whether the connection will be pooled or explicitly opened every time that the connection is requested.
     pub fn set_pooling(&mut self, value: bool) {
         self.pooling = value;
         self.keywords_in_use.push(Keyword::Pooling);
     }
+
     /// The blocking period behavior for a connection pool.
     pub fn set_pool_blocking_period(&mut self, value: PoolBlockingPeriod) {
         self.pool_blocking_period = value;
         self.keywords_in_use.push(Keyword::PoolBlockingPeriod);
     }
+
     /// Whether replication is supported using the connection.
     pub fn set_replication(&mut self, value: bool) {
         self.replication = value;
         self.keywords_in_use.push(Keyword::Replication);
     }
+
     /// Indicates how the connection maintains its association with an enlisted System.Transactions transaction.
     pub fn set_transaction_binding(&mut self, value: String) {
         self.transaction_binding = value;
         self.keywords_in_use.push(Keyword::TransactionBinding);
     }
+
     /// Whether the channel will be encrypted while bypassing walking the certificate chain to validate trust.
     pub fn set_trust_server_certificate(&mut self, value: bool) {
         self.trust_server_certificate = value;
         self.keywords_in_use.push(Keyword::TrustServerCertificate);
     }
+
     /// Indicates the type system the application expects.
     pub fn set_type_system_version(&mut self, value: String) {
         self.type_system_version = value;
         self.keywords_in_use.push(Keyword::TypeSystemVersion);
     }
+
     /// The user ID to be used when connecting to SQL Server.
     pub fn set_user_id(&mut self, value: Option<String>) {
         self.user_id = value;
         self.keywords_in_use.push(Keyword::UserId);
     }
+
     /// The name of the workstation connecting to SQL Server.
     pub fn set_workstation_id(&mut self, value: Option<String>) {
         self.workstation_id = value;
         self.keywords_in_use.push(Keyword::WorkstationId);
     }
+
     /// Gets or sets a value that indicates whether to redirect the connection from the default SQL Server Express instance to a runtime-initiated instance running under the account of the caller.
     pub fn set_user_instance(&mut self, value: bool) {
         self.user_instance = value;
