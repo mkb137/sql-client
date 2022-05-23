@@ -11,6 +11,7 @@ keywords = ["sql", "mssql", "ms-sql"]
 [dependencies]
 anyhow = "1.0"
 log = "0.4"
+secstr = "0.5.0"
 thiserror = "1.0"
 
 [dev-dependencies]

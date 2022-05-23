@@ -11,4 +11,10 @@ pub enum SqlClientError {
     /// The connection string contained an unsupported keyword.
     #[error("The keyword '{0}' is not supported.")]
     UnsupportedKeyword(String),
+    /// An argument was null.
+    #[error("A value was not supplied for the argument {0}")]
+    ArgumentNull(String),
+    /// The length of an argument was valid (i.e. a string was too long).
+    #[error("The value '{1}' supplied for argument {0} was greater than length {2}")]
+    InvalidArgumentLength(String, String, usize),
 }
