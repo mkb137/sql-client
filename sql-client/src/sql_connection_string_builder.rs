@@ -429,17 +429,17 @@ impl SqlConnectionStringBuilder {
                     append_str(&mut value, "Min Pool Size", self.min_pool_size.to_string());
                 }
                 Keyword::MultipleActiveResultSets => {
-                    append_str(
+                    append_bool(
                         &mut value,
                         "Multiple Active Result Sets",
-                        self.multiple_active_result_sets.to_string(),
+                        self.multiple_active_result_sets,
                     );
                 }
                 Keyword::MultiSubnetFailover => {
-                    append_str(
+                    append_bool(
                         &mut value,
                         "Multi Subnet Failover",
-                        self.multi_subnet_failover.to_string(),
+                        self.multi_subnet_failover,
                     );
                 }
                 Keyword::PacketSize => {
@@ -456,7 +456,7 @@ impl SqlConnectionStringBuilder {
                     );
                 }
                 Keyword::Pooling => {
-                    append_str(&mut value, "Pooling", self.pooling.to_string());
+                    append_bool(&mut value, "Pooling", self.pooling);
                 }
                 Keyword::PoolBlockingPeriod => {
                     append_str(
@@ -496,7 +496,7 @@ impl SqlConnectionStringBuilder {
                     );
                 }
                 Keyword::UserInstance => {
-                    append_str(&mut value, "User Instance", self.user_instance.to_string());
+                    append_bool(&mut value, "User Instance", self.user_instance);
                 }
             }
         }
@@ -757,7 +757,8 @@ impl TryFrom<&str> for SqlConnectionStringBuilder {
                         connection_string_builder.set_attach_db_filename(Some(value.to_string()));
                     }
                     "authentication" => {
-                        connection_string_builder.set_attach_db_filename(Some(value.to_string()));
+                        let authentication: SqlAuthenticationMethod = value.try_into()?;
+                        connection_string_builder.set_authentication(authentication);
                     }
                     "column encryption setting" => {
                         let column_encrpytion_setting: SqlConnectionColumnEncryptionSetting =
@@ -980,6 +981,78 @@ mod tests {
     #[rstest::rstest]
     #[case("Application Intent=ReadWrite", "Application Intent=ReadWrite")]
     #[case("ApplicationIntent=ReadOnly", "Application Intent=ReadOnly")]
+    #[case("Application Name=Some Name", "Application Name=Some Name")]
+    #[case("App=Some Name", "Application Name=Some Name")]
+    #[case("AttachDbFileName=SomeFile.txt", "AttachDbFilename=SomeFile.txt")]
+    #[case("Initial File Name=SomeFile.txt", "AttachDbFilename=SomeFile.txt")]
+    #[case(
+        "Authentication=ActiveDirectoryPassword",
+        "Authentication=Active Directory Password"
+    )]
+    #[case(
+        "Column Encryption Setting=Enabled",
+        "Column Encryption Setting=Enabled"
+    )]
+    #[case("Command Timeout=160", "Command Timeout=160")]
+    #[case("Connect Retry Count=50", "Connect Retry Count=50")]
+    #[case("ConnectRetryCount=50", "Connect Retry Count=50")]
+    #[case("Connect Retry Interval=50", "Connect Retry Interval=50")]
+    #[case("ConnectRetryInterval=50", "Connect Retry Interval=50")]
+    #[case("Connect Timeout=100", "Connect Timeout=100")]
+    #[case("Connection Timeout=100", "Connect Timeout=100")]
+    #[case("Timeout=100", "Connect Timeout=100")]
+    #[case("Current Language=en", "Current Language=en")]
+    #[case("Language=en", "Current Language=en")]
+    #[case("Data Source=127.0.0.1:1433", "Data Source=127.0.0.1:1433")]
+    #[case("Addr=127.0.0.1:1433", "Data Source=127.0.0.1:1433")]
+    #[case("Address=127.0.0.1:1433", "Data Source=127.0.0.1:1433")]
+    #[case("Network Address=127.0.0.1:1433", "Data Source=127.0.0.1:1433")]
+    #[case("Server=127.0.0.1:1433", "Data Source=127.0.0.1:1433")]
+    #[case(
+        "Enclave Attestation Url=https://someurl",
+        "Enclave Attestation Url=https://someurl"
+    )]
+    #[case("Encrypt=Yes", "Encrypt=True")]
+    #[case("Enlist=No", "Enlist=False")]
+    #[case("Failover Partner=Some Value", "Failover Partner=Some Value")]
+    #[case("Initial Catalog=SomeDb", "Initial Catalog=SomeDb")]
+    #[case("Database=SomeDb", "Initial Catalog=SomeDb")]
+    #[case("Integrated Security=SSPI", "Integrated Security=True")]
+    #[case("Integrated Security=True", "Integrated Security=True")]
+    #[case("Trusted_Connection=True", "Integrated Security=True")]
+    #[case("IP Address Preference=IPv4First", "IP Address Preference=IPv4First")]
+    #[case("IPAddressPreference=IPv6First", "IP Address Preference=IPv6First")]
+    #[case("Load Balance Timeout=123", "Load Balance Timeout=123")]
+    #[case("Connection Lifetime=123", "Load Balance Timeout=123")]
+    #[case("Max Pool Size=10", "Max Pool Size=10")]
+    #[case("Min Pool Size=10", "Min Pool Size=10")]
+    #[case("Multiple Active Result Sets=True", "Multiple Active Result Sets=True")]
+    #[case("MultipleActiveResultSets=True", "Multiple Active Result Sets=True")]
+    #[case("Multi Subnet Failover=No", "Multi Subnet Failover=False")]
+    #[case("MultiSubnetFailover=No", "Multi Subnet Failover=False")]
+    #[case("Packet Size=10", "Packet Size=10")]
+    #[case("Password=abc123", "Password=abc123")]
+    #[case("Pwd=abc123", "Password=abc123")]
+    #[case("Persist Security Info=No", "Persist Security Info=False")]
+    #[case("PersistSecurityInfo=No", "Persist Security Info=False")]
+    #[case("Pooling=Yes", "Pooling=True")]
+    #[case("Pool Blocking Period=AlwaysBlock", "Pool Blocking Period=AlwaysBlock")]
+    #[case("PoolBlockingPeriod=AlwaysBlock", "Pool Blocking Period=AlwaysBlock")]
+    #[case("Replication=yes", "Replication=True")]
+    #[case("Transaction Binding=ABC", "Transaction Binding=ABC")]
+    #[case("Trust Server Certificate=Yes", "Trust Server Certificate=True")]
+    #[case("TrustServerCertificate=No", "Trust Server Certificate=False")]
+    #[case("Type System Version=123", "Type System Version=123")]
+    #[case("User ID=domain\\user", "User ID=domain\\user")]
+    #[case("User=domain\\user", "User ID=domain\\user")]
+    #[case("UID=domain\\user", "User ID=domain\\user")]
+    #[case("Workstation ID=ABC", "Workstation ID=ABC")]
+    #[case("WSID=ABC", "Workstation ID=ABC")]
+    #[case("User Instance=True", "User Instance=True")]
+    #[case(
+        "Data Source=127.0.0.1:1433;Initial Catalog=SomeDb;User ID=domain\\user;Password=abc123",
+        "Data Source=127.0.0.1:1433;Initial Catalog=SomeDb;User ID=domain\\user;Password=abc123"
+    )]
     fn test_connection_string_roundtrip(#[case] value: &str, #[case] expected: &str) {
         // Create a connection string builder
         let builder: SqlConnectionStringBuilder = value.try_into().unwrap();
