@@ -5,6 +5,7 @@ use crate::{
     ApplicationIntent, PoolBlockingPeriod, SqlAuthenticationMethod, SqlClientError,
     SqlConnectionColumnEncryptionSetting, SqlConnectionIpAddressPreference,
 };
+use secstr::SecStr;
 use std::collections::{HashMap, HashSet};
 use std::fmt::Display;
 
@@ -74,7 +75,7 @@ const DEFAULT_MIN_POOL_SIZE: u8 = 0;
 const DEFAULT_MULTIPLE_ACTIVE_RESULT_SETS: bool = false;
 const DEFAULT_MULTI_SUBNET_FAILOVER: bool = false;
 const DEFAULT_PACKET_SIZE: u16 = 8000;
-const DEFAULT_PASSWORD: Option<String> = None;
+const DEFAULT_PASSWORD: Option<SecStr> = None;
 const DEFAULT_PERSIST_SECURITY_INFO: bool = false;
 const DEFAULT_POOLING: bool = true;
 const DEFAULT_POOL_BLOCKING_PERIOD: PoolBlockingPeriod = PoolBlockingPeriod::Auto;
@@ -197,7 +198,7 @@ pub struct SqlConnectionStringBuilder {
     /// The size in bytes of the network packets used to communicate with an instance of SQL Server.
     packet_size: u16,
     /// The password for the SQL Server account.
-    password: Option<String>,
+    password: Option<SecStr>,
     /// Indicates if security-sensitive information, such as the password or access token, should be returned as part of the connection string on a connection created with this SqlConnectionStringBuilder after that connection has ever been in an open state.
     persist_security_info: bool,
     /// Whether the connection will be pooled or explicitly opened every time that the connection is requested.
@@ -343,7 +344,7 @@ impl SqlConnectionStringBuilder {
     }
 
     /// The password for the SQL Server account.
-    fn password(&self) -> Option<String> {
+    fn password(&self) -> Option<SecStr> {
         self.password.clone()
     }
 
@@ -533,7 +534,11 @@ impl SqlConnectionStringBuilder {
                     append_str(&mut value, "Packet Size", self.packet_size.to_string());
                 }
                 Keyword::Password => {
-                    append_opt(&mut value, "Password", self.password.clone());
+                    let pwd = self
+                        .password
+                        .clone()
+                        .map(|pwd| String::from_utf8_lossy(pwd.unsecure()).to_string());
+                    append_opt(&mut value, "Password", pwd);
                 }
                 Keyword::PersistSecurityInfo => {
                     append_bool(
@@ -712,7 +717,7 @@ impl SqlConnectionStringBuilder {
         self.keywords_in_use.push(Keyword::PacketSize);
     }
     /// The password for the SQL Server account.
-    fn set_password(&mut self, value: Option<String>) {
+    fn set_password(&mut self, value: Option<SecStr>) {
         self.password = value;
         self.keywords_in_use.push(Keyword::Password);
     }
@@ -945,7 +950,7 @@ impl TryFrom<&str> for SqlConnectionStringBuilder {
                         connection_string_builder.set_packet_size(packet_size);
                     }
                     "password" | "pwd" => {
-                        connection_string_builder.set_password(Some(value.to_string()));
+                        connection_string_builder.set_password(Some(SecStr::from(value)));
                     }
                     "persist security info" | "persistsecurityinfo" => {
                         let persist_security_info = convert_to_boolean(value)?;
@@ -998,18 +1003,10 @@ impl TryFrom<&str> for SqlConnectionStringBuilder {
                 ));
             }
         }
-        // If we succeeded, above, return the connection string builder.
+        // If we succeeded, above (i.e. there were no invalid or unsupported keywords),
+        // return the connection string builder.
         Ok(connection_string_builder)
     }
-    // /// Parses a connection string to create a connection string builder.
-    // fn from(connection_string: &str) -> Self {
-    //     log::debug!("from - connection_string = {:?}", connection_string);
-    //     // Create a dictionary of keys and values
-    //     connection_string.split(";").iter()
-    //     let mut dict = HashMap::new();
-    //     //
-    //     todo!()
-    // }
 }
 
 #[cfg(test)]
