@@ -2,7 +2,7 @@ use crate::sql_client_error::SqlClientError;
 use std::fmt::{Display, Formatter};
 
 /// Describes the different SQL authentication methods that can be used by a client connecting to Azure SQL Database
-#[derive(PartialEq, Debug)]
+#[derive(PartialEq, Debug, Clone, Copy)]
 pub enum SqlAuthenticationMethod {
     /// The authentication method is not specified.
     NotSpecified,

@@ -2,7 +2,7 @@ use crate::sql_client_error::SqlClientError;
 use std::fmt::{Display, Formatter};
 
 /// ?
-#[derive(PartialEq, Debug)]
+#[derive(PartialEq, Debug, Clone, Copy)]
 pub enum PoolBlockingPeriod {
     // Blocking period OFF for Azure SQL servers, but ON for all other SQL servers.
     Auto = 0,

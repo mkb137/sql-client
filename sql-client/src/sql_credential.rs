@@ -22,7 +22,8 @@ impl SqlCredential {
             ));
         }
         // If the password is too long, return an error.
-        if password.len() > super::tds_enums::login_validation_rules::MAXLEN_CLIENTID {
+        let password_length = password.unsecure().len();
+        if password_length > super::tds_enums::login_validation_rules::MAXLEN_CLIENTID {
             return Err(SqlClientError::InvalidArgumentLength(
                 "password".to_string(),
                 "(redacted)".to_string(),

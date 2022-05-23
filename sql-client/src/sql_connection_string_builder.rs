@@ -214,100 +214,188 @@ pub struct SqlConnectionStringBuilder {
     type_system_version: String,
     /// The user ID to be used when connecting to SQL Server.
     user_id: Option<String>,
-    /// The name of the workstation connecting to SQL Server.
-    workstation_id: Option<String>,
     /// Gets or sets a value that indicates whether to redirect the connection from the default SQL Server Express instance to a runtime-initiated instance running under the account of the caller.
     user_instance: bool,
+    /// The name of the workstation connecting to SQL Server.
+    workstation_id: Option<String>,
     /// The keywords that have been set.  Used to produce a connection string only with the values that have been set explicitly.
     keywords_in_use: Vec<Keyword>,
 }
 
 impl SqlConnectionStringBuilder {
-    //     /// Declares the application workload type when connecting to a database in an SQL Server Availability Group.
-    //     fn application_intent(self) -> ApplicationIntent {
-    //         self.application_intent
-    //     }
-    //
-    //     /// The name of the application associated with the connection string.
-    //     fn application_name(self) -> String {
-    //         self.application_name.clone()
-    //     }
-    //     /// Gets or sets a string that contains the name of the primary data file. This includes the full path name of an attachable database.
-    //     fn attach_db_filename(self) -> Option<String> {
-    //         self.attach_db_filename.clone()
-    //     }
-    //     /// ?
-    //     fn authentication(self) -> SqlAuthenticationMethod{
-    //         self.authentication
-    //     }
-    //     /// ?
-    //     fn column_encryption_setting(self) -> SqlConnectionColumnEncryptionSetting{
-    //         self.column_encryption_setting
-    //     }
-    //     /// The number of reconnections attempted after identifying that there was an idle connection failure. This must be an integer between 0 and 255. Default is 1. Set to 0 to disable reconnecting on idle connection failures.
-    //     fn connect_retry_count(self) -> u8{
-    //         self.connect_retry_count
-    //     }
-    //     /// Amount of time (in seconds) between each reconnection attempt after identifying that there was an idle connection failure. This must be an integer between 1 and 60. The default is 10 seconds.
-    //     fn connect_retry_interval(self) -> u8{
-    //         self.con
-    //     }
-    //     /// The length of time (in seconds) to wait for a connection to the server before terminating the attempt and generating an error.
-    //     fn connect_timeout(self) -> u16,
-    //     /// The length of time (in seconds) to wait for a command to the server before terminating the attempt and generating an error.
-    //     fn command_timeout(self) -> u16,
-    //     /// The SQL Server Language record name.
-    //     fn current_language(self) -> Option<String>,
-    //     /// The name or network address of the instance of SQL Server to connect to.
-    //     fn data_source(self) -> Option<String>,
-    //     /// ?
-    //     fn enclave_attestation_url(self) -> Option<String>,
-    //     /// Whether SQL Server uses SSL encryption for all data sent between the client and server if the server has a certificate installed.
-    //     fn encrypt(self) -> bool,
-    //     /// Whether the SQL Server connection pooler automatically enlists the connection in the creation thread's current transaction context.
-    //     fn enlist(self) -> bool,
-    //     /// The name or address of the partner server to connect to if the primary server is down.
-    //     fn failover_partner(self) -> Option<String>,
-    //     /// The name of the database associated with the connection.
-    //     fn initial_catalog(self) -> Option<String>,
-    //     /// Whether User ID and Password are specified in the connection (when false) or whether the current Windows account credentials are used for authentication (when true).
-    //     fn integrated_security(self) -> bool,
-    //     /// ?
-    //     fn ip_address_preference(self) -> SqlConnectionIpAddressPreference,
-    //     /// ??
-    //     fn load_balance_timeout(self) -> u16,
-    //     /// The maximum number of connections allowed in the connection pool for this specific connection string.
-    //     fn max_pool_size(self) -> u8,
-    //     /// The minimum number of connections allowed in the connection pool for this specific connection string.
-    //     fn min_pool_size(self) -> u8,
-    //     /// When true, an application can maintain multiple active result sets (MARS). When false, an application must process or cancel all result sets from one batch before it can execute any other batch on that connection.
-    //     fn multiple_active_result_sets(self) -> bool,
-    //     /// If your application is connecting to an Always On availability group (AG) or Always On Failover Cluster Instance (FCI) on different subnets, setting MultiSubnetFailover=true provides faster detection of and connection to the (currently) active server.
-    //     fn multi_subnet_failover(self) -> bool,
-    //     /// The size in bytes of the network packets used to communicate with an instance of SQL Server.
-    //     fn packet_size(self) -> u16,
-    //     /// The password for the SQL Server account.
-    //     fn password(self) -> Option<String>,
-    //     /// Indicates if security-sensitive information, such as the password or access token, should be returned as part of the connection string on a connection created with this SqlConnectionStringBuilder after that connection has ever been in an open state.
-    //     fn persist_security_info(self) -> bool,
-    //     /// Whether the connection will be pooled or explicitly opened every time that the connection is requested.
-    //     fn pooling(self) -> bool,
-    //     /// The blocking period behavior for a connection pool.
-    //     fn pool_blocking_period(self) -> PoolBlockingPeriod,
-    //     /// Whether replication is supported using the connection.
-    //     fn replication(self) -> bool,
-    //     /// Indicates how the connection maintains its association with an enlisted System.Transactions transaction.
-    //     fn transaction_binding(self) -> String,
-    //     /// Whether the channel will be encrypted while bypassing walking the certificate chain to validate trust.
-    //     fn trust_server_certificate(self) -> bool,
-    //     /// Indicates the type system the application expects.
-    //     fn type_system_version(self) -> String,
-    //     /// The user ID to be used when connecting to SQL Server.
-    //     fn user_id(self) -> Option<String>,
-    //     /// The name of the workstation connecting to SQL Server.
-    //     fn workstation_id(self) -> Option<String>,
-    //     /// Gets or sets a value that indicates whether to redirect the connection from the default SQL Server Express instance to a runtime-initiated instance running under the account of the caller.
-    //     fn user_instance(self) -> bool,
+    /// Declares the application workload type when connecting to a database in an SQL Server Availability Group.
+    fn application_intent(&self) -> ApplicationIntent {
+        self.application_intent.clone()
+    }
+
+    /// The name of the application associated with the connection string.
+    fn application_name(&self) -> String {
+        self.application_name.clone()
+    }
+
+    /// Gets or sets a string that contains the name of the primary data file. This includes the full path name of an attachable database.
+    fn attach_db_filename(&self) -> Option<String> {
+        self.attach_db_filename.clone()
+    }
+
+    /// ?
+    fn authentication(&self) -> SqlAuthenticationMethod {
+        self.authentication.clone()
+    }
+
+    /// ?
+    fn column_encryption_setting(&self) -> SqlConnectionColumnEncryptionSetting {
+        self.column_encryption_setting.clone()
+    }
+
+    /// The number of reconnections attempted after identifying that there was an idle connection failure. This must be an integer between 0 and 255. Default is 1. Set to 0 to disable reconnecting on idle connection failures.
+    fn connect_retry_count(&self) -> u8 {
+        self.connect_retry_count.clone()
+    }
+
+    /// Amount of time (in seconds) between each reconnection attempt after identifying that there was an idle connection failure. This must be an integer between 1 and 60. The default is 10 seconds.
+    fn connect_retry_interval(&self) -> u8 {
+        self.connect_retry_interval.clone()
+    }
+
+    /// The length of time (in seconds) to wait for a connection to the server before terminating the attempt and generating an error.
+    fn connect_timeout(&self) -> u16 {
+        self.connect_timeout.clone()
+    }
+
+    /// The length of time (in seconds) to wait for a command to the server before terminating the attempt and generating an error.
+    fn command_timeout(&self) -> u16 {
+        self.command_timeout.clone()
+    }
+
+    /// The SQL Server Language record name.
+    fn current_language(&self) -> Option<String> {
+        self.current_language.clone()
+    }
+
+    /// The name or network address of the instance of SQL Server to connect to.
+    fn data_source(&self) -> Option<String> {
+        self.data_source.clone()
+    }
+
+    /// ?
+    fn enclave_attestation_url(&self) -> Option<String> {
+        self.enclave_attestation_url.clone()
+    }
+
+    /// Whether SQL Server uses SSL encryption for all data sent between the client and server if the server has a certificate installed.
+    fn encrypt(&self) -> bool {
+        self.encrypt.clone()
+    }
+
+    /// Whether the SQL Server connection pooler automatically enlists the connection in the creation thread's current transaction context.
+    fn enlist(&self) -> bool {
+        self.enlist.clone()
+    }
+
+    /// The name or address of the partner server to connect to if the primary server is down.
+    fn failover_partner(&self) -> Option<String> {
+        self.failover_partner.clone()
+    }
+
+    /// The name of the database associated with the connection.
+    fn initial_catalog(&self) -> Option<String> {
+        self.initial_catalog.clone()
+    }
+
+    /// Whether User ID and Password are specified in the connection (when false) or whether the current Windows account credentials are used for authentication (when true).
+    fn integrated_security(&self) -> bool {
+        self.integrated_security.clone()
+    }
+
+    /// ?
+    fn ip_address_preference(&self) -> SqlConnectionIpAddressPreference {
+        self.ip_address_preference.clone()
+    }
+    /// ??
+    fn load_balance_timeout(&self) -> u16 {
+        self.load_balance_timeout.clone()
+    }
+
+    /// The maximum number of connections allowed in the connection pool for this specific connection string.
+    fn max_pool_size(&self) -> u8 {
+        self.max_pool_size.clone()
+    }
+
+    /// The minimum number of connections allowed in the connection pool for this specific connection string.
+    fn min_pool_size(&self) -> u8 {
+        self.min_pool_size.clone()
+    }
+
+    /// When true{ self.x.clone() } an application can maintain multiple active result sets (MARS). When false{ self.x.clone() } an application must process or cancel all result sets from one batch before it can execute any other batch on that connection.
+    fn multiple_active_result_sets(&self) -> bool {
+        self.multiple_active_result_sets.clone()
+    }
+
+    /// If your application is connecting to an Always On availability group (AG) or Always On Failover Cluster Instance (FCI) on different subnets{ self.x.clone() } setting MultiSubnetFailover=true provides faster detection of and connection to the (currently) active server.
+    fn multi_subnet_failover(&self) -> bool {
+        self.multi_subnet_failover.clone()
+    }
+
+    /// The size in bytes of the network packets used to communicate with an instance of SQL Server.
+    fn packet_size(&self) -> u16 {
+        self.packet_size.clone()
+    }
+
+    /// The password for the SQL Server account.
+    fn password(&self) -> Option<String> {
+        self.password.clone()
+    }
+
+    /// Indicates if security-sensitive information{ self.x.clone() } such as the password or access token{ self.x.clone() } should be returned as part of the connection string on a connection created with this SqlConnectionStringBuilder after that connection has ever been in an open state.
+    fn persist_security_info(&self) -> bool {
+        self.persist_security_info.clone()
+    }
+
+    /// Whether the connection will be pooled or explicitly opened every time that the connection is requested.
+    fn pooling(&self) -> bool {
+        self.pooling.clone()
+    }
+
+    /// The blocking period behavior for a connection pool.
+    fn pool_blocking_period(&self) -> PoolBlockingPeriod {
+        self.pool_blocking_period.clone()
+    }
+
+    /// Whether replication is supported using the connection.
+    fn replication(&self) -> bool {
+        self.replication.clone()
+    }
+
+    /// Indicates how the connection maintains its association with an enlisted System.Transactions transaction.
+    fn transaction_binding(&self) -> String {
+        self.transaction_binding.clone()
+    }
+
+    /// Whether the channel will be encrypted while bypassing walking the certificate chain to validate trust.
+    fn trust_server_certificate(&self) -> bool {
+        self.trust_server_certificate.clone()
+    }
+
+    /// Indicates the type system the application expects.
+    fn type_system_version(&self) -> String {
+        self.type_system_version.clone()
+    }
+
+    /// The user ID to be used when connecting to SQL Server.
+    fn user_id(&self) -> Option<String> {
+        self.user_id.clone()
+    }
+
+    /// Gets or sets a value that indicates whether to redirect the connection from the default SQL Server Express instance to a runtime-initiated instance running under the account of the caller.
+    fn user_instance(&self) -> bool {
+        self.user_instance.clone()
+    }
+
+    /// The name of the workstation connecting to SQL Server.
+    fn workstation_id(&self) -> Option<String> {
+        self.workstation_id.clone()
+    }
 
     /// Returns the connection string.
     fn connection_string(&self) -> String {
@@ -1059,5 +1147,11 @@ mod tests {
         let actual = builder.connection_string();
         // Check the results
         assert_eq!(expected, actual.as_str());
+    }
+
+    fn do_stuff() {
+        let builder: SqlConnectionStringBuilder = "".try_into().unwrap();
+        let a = builder.application_intent();
+        let b = builder.application_intent();
     }
 }

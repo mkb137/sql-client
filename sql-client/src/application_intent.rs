@@ -1,7 +1,7 @@
 use crate::sql_client_error::SqlClientError;
 use std::fmt::{Display, Formatter};
 
-#[derive(PartialEq, Debug)]
+#[derive(PartialEq, Debug, Clone, Copy)]
 pub enum ApplicationIntent {
     /// The application workload type when connecting to a server is read write.
     ReadWrite = 0,

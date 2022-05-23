@@ -2,7 +2,7 @@ use crate::sql_client_error::SqlClientError;
 use std::fmt::{Display, Formatter};
 
 /// ?
-#[derive(PartialEq, Debug)]
+#[derive(PartialEq, Debug, Clone, Copy)]
 pub enum SqlConnectionColumnEncryptionSetting {
     Disabled = 0,
     Enabled = 1,
