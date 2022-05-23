@@ -225,181 +225,181 @@ pub struct SqlConnectionStringBuilder {
 
 impl SqlConnectionStringBuilder {
     /// Declares the application workload type when connecting to a database in an SQL Server Availability Group.
-    fn application_intent(&self) -> ApplicationIntent {
+    pub fn application_intent(&self) -> ApplicationIntent {
         self.application_intent.clone()
     }
 
     /// The name of the application associated with the connection string.
-    fn application_name(&self) -> String {
+    pub fn application_name(&self) -> String {
         self.application_name.clone()
     }
 
     /// Gets or sets a string that contains the name of the primary data file. This includes the full path name of an attachable database.
-    fn attach_db_filename(&self) -> Option<String> {
+    pub fn attach_db_filename(&self) -> Option<String> {
         self.attach_db_filename.clone()
     }
 
     /// ?
-    fn authentication(&self) -> SqlAuthenticationMethod {
+    pub fn authentication(&self) -> SqlAuthenticationMethod {
         self.authentication.clone()
     }
 
     /// ?
-    fn column_encryption_setting(&self) -> SqlConnectionColumnEncryptionSetting {
+    pub fn column_encryption_setting(&self) -> SqlConnectionColumnEncryptionSetting {
         self.column_encryption_setting.clone()
     }
 
     /// The number of reconnections attempted after identifying that there was an idle connection failure. This must be an integer between 0 and 255. Default is 1. Set to 0 to disable reconnecting on idle connection failures.
-    fn connect_retry_count(&self) -> u8 {
+    pub fn connect_retry_count(&self) -> u8 {
         self.connect_retry_count.clone()
     }
 
     /// Amount of time (in seconds) between each reconnection attempt after identifying that there was an idle connection failure. This must be an integer between 1 and 60. The default is 10 seconds.
-    fn connect_retry_interval(&self) -> u8 {
+    pub fn connect_retry_interval(&self) -> u8 {
         self.connect_retry_interval.clone()
     }
 
     /// The length of time (in seconds) to wait for a connection to the server before terminating the attempt and generating an error.
-    fn connect_timeout(&self) -> u16 {
+    pub fn connect_timeout(&self) -> u16 {
         self.connect_timeout.clone()
     }
 
     /// The length of time (in seconds) to wait for a command to the server before terminating the attempt and generating an error.
-    fn command_timeout(&self) -> u16 {
+    pub fn command_timeout(&self) -> u16 {
         self.command_timeout.clone()
     }
 
     /// The SQL Server Language record name.
-    fn current_language(&self) -> Option<String> {
+    pub fn current_language(&self) -> Option<String> {
         self.current_language.clone()
     }
 
     /// The name or network address of the instance of SQL Server to connect to.
-    fn data_source(&self) -> Option<String> {
+    pub fn data_source(&self) -> Option<String> {
         self.data_source.clone()
     }
 
     /// ?
-    fn enclave_attestation_url(&self) -> Option<String> {
+    pub fn enclave_attestation_url(&self) -> Option<String> {
         self.enclave_attestation_url.clone()
     }
 
     /// Whether SQL Server uses SSL encryption for all data sent between the client and server if the server has a certificate installed.
-    fn encrypt(&self) -> bool {
+    pub fn encrypt(&self) -> bool {
         self.encrypt.clone()
     }
 
     /// Whether the SQL Server connection pooler automatically enlists the connection in the creation thread's current transaction context.
-    fn enlist(&self) -> bool {
+    pub fn enlist(&self) -> bool {
         self.enlist.clone()
     }
 
     /// The name or address of the partner server to connect to if the primary server is down.
-    fn failover_partner(&self) -> Option<String> {
+    pub fn failover_partner(&self) -> Option<String> {
         self.failover_partner.clone()
     }
 
     /// The name of the database associated with the connection.
-    fn initial_catalog(&self) -> Option<String> {
+    pub fn initial_catalog(&self) -> Option<String> {
         self.initial_catalog.clone()
     }
 
     /// Whether User ID and Password are specified in the connection (when false) or whether the current Windows account credentials are used for authentication (when true).
-    fn integrated_security(&self) -> bool {
+    pub fn integrated_security(&self) -> bool {
         self.integrated_security.clone()
     }
 
     /// ?
-    fn ip_address_preference(&self) -> SqlConnectionIpAddressPreference {
+    pub fn ip_address_preference(&self) -> SqlConnectionIpAddressPreference {
         self.ip_address_preference.clone()
     }
     /// ??
-    fn load_balance_timeout(&self) -> u16 {
+    pub fn load_balance_timeout(&self) -> u16 {
         self.load_balance_timeout.clone()
     }
 
     /// The maximum number of connections allowed in the connection pool for this specific connection string.
-    fn max_pool_size(&self) -> u8 {
+    pub fn max_pool_size(&self) -> u8 {
         self.max_pool_size.clone()
     }
 
     /// The minimum number of connections allowed in the connection pool for this specific connection string.
-    fn min_pool_size(&self) -> u8 {
+    pub fn min_pool_size(&self) -> u8 {
         self.min_pool_size.clone()
     }
 
     /// When true{ self.x.clone() } an application can maintain multiple active result sets (MARS). When false{ self.x.clone() } an application must process or cancel all result sets from one batch before it can execute any other batch on that connection.
-    fn multiple_active_result_sets(&self) -> bool {
+    pub fn multiple_active_result_sets(&self) -> bool {
         self.multiple_active_result_sets.clone()
     }
 
     /// If your application is connecting to an Always On availability group (AG) or Always On Failover Cluster Instance (FCI) on different subnets{ self.x.clone() } setting MultiSubnetFailover=true provides faster detection of and connection to the (currently) active server.
-    fn multi_subnet_failover(&self) -> bool {
+    pub fn multi_subnet_failover(&self) -> bool {
         self.multi_subnet_failover.clone()
     }
 
     /// The size in bytes of the network packets used to communicate with an instance of SQL Server.
-    fn packet_size(&self) -> u16 {
+    pub fn packet_size(&self) -> u16 {
         self.packet_size.clone()
     }
 
     /// The password for the SQL Server account.
-    fn password(&self) -> Option<SecStr> {
+    pub fn password(&self) -> Option<SecStr> {
         self.password.clone()
     }
 
     /// Indicates if security-sensitive information{ self.x.clone() } such as the password or access token{ self.x.clone() } should be returned as part of the connection string on a connection created with this SqlConnectionStringBuilder after that connection has ever been in an open state.
-    fn persist_security_info(&self) -> bool {
+    pub fn persist_security_info(&self) -> bool {
         self.persist_security_info.clone()
     }
 
     /// Whether the connection will be pooled or explicitly opened every time that the connection is requested.
-    fn pooling(&self) -> bool {
+    pub fn pooling(&self) -> bool {
         self.pooling.clone()
     }
 
     /// The blocking period behavior for a connection pool.
-    fn pool_blocking_period(&self) -> PoolBlockingPeriod {
+    pub fn pool_blocking_period(&self) -> PoolBlockingPeriod {
         self.pool_blocking_period.clone()
     }
 
     /// Whether replication is supported using the connection.
-    fn replication(&self) -> bool {
+    pub fn replication(&self) -> bool {
         self.replication.clone()
     }
 
     /// Indicates how the connection maintains its association with an enlisted System.Transactions transaction.
-    fn transaction_binding(&self) -> String {
+    pub fn transaction_binding(&self) -> String {
         self.transaction_binding.clone()
     }
 
     /// Whether the channel will be encrypted while bypassing walking the certificate chain to validate trust.
-    fn trust_server_certificate(&self) -> bool {
+    pub fn trust_server_certificate(&self) -> bool {
         self.trust_server_certificate.clone()
     }
 
     /// Indicates the type system the application expects.
-    fn type_system_version(&self) -> String {
+    pub fn type_system_version(&self) -> String {
         self.type_system_version.clone()
     }
 
     /// The user ID to be used when connecting to SQL Server.
-    fn user_id(&self) -> Option<String> {
+    pub fn user_id(&self) -> Option<String> {
         self.user_id.clone()
     }
 
     /// Gets or sets a value that indicates whether to redirect the connection from the default SQL Server Express instance to a runtime-initiated instance running under the account of the caller.
-    fn user_instance(&self) -> bool {
+    pub fn user_instance(&self) -> bool {
         self.user_instance.clone()
     }
 
     /// The name of the workstation connecting to SQL Server.
-    fn workstation_id(&self) -> Option<String> {
+    pub fn workstation_id(&self) -> Option<String> {
         self.workstation_id.clone()
     }
 
     /// Returns the connection string.
-    fn connection_string(&self) -> String {
+    pub fn connection_string(&self) -> String {
         // Start with a blank connection string
         let mut value = String::new();
         // For each of the keywords that were overridden by the user...
@@ -597,177 +597,177 @@ impl SqlConnectionStringBuilder {
     }
 
     /// Declares the application workload type when connecting to a database in an SQL Server Availability Group.
-    fn set_application_intent(&mut self, value: ApplicationIntent) {
+    pub fn set_application_intent(&mut self, value: ApplicationIntent) {
         self.application_intent = value;
         self.keywords_in_use.push(Keyword::ApplicationIntent);
     }
     /// The name of the application associated with the connection string.
-    fn set_application_name(&mut self, value: String) {
+    pub fn set_application_name(&mut self, value: String) {
         self.application_name = value;
         self.keywords_in_use.push(Keyword::ApplicationName);
     }
     /// Gets or sets a string that contains the name of the primary data file. This includes the full path name of an attachable database.
-    fn set_attach_db_filename(&mut self, value: Option<String>) {
+    pub fn set_attach_db_filename(&mut self, value: Option<String>) {
         self.attach_db_filename = value;
         self.keywords_in_use.push(Keyword::AttachDbFilename);
     }
     /// ?
-    fn set_authentication(&mut self, value: SqlAuthenticationMethod) {
+    pub fn set_authentication(&mut self, value: SqlAuthenticationMethod) {
         self.authentication = value;
         self.keywords_in_use.push(Keyword::Authentication);
     }
     /// ?
-    fn set_column_encryption_setting(&mut self, value: SqlConnectionColumnEncryptionSetting) {
+    pub fn set_column_encryption_setting(&mut self, value: SqlConnectionColumnEncryptionSetting) {
         self.column_encryption_setting = value;
         self.keywords_in_use.push(Keyword::ColumnEncryptionSetting);
     }
     /// The length of time (in seconds) to wait for a command to the server before terminating the attempt and generating an error.
-    fn set_command_timeout(&mut self, value: u16) {
+    pub fn set_command_timeout(&mut self, value: u16) {
         self.command_timeout = value;
         self.keywords_in_use.push(Keyword::CommandTimeout);
     }
     /// The number of reconnections attempted after identifying that there was an idle connection failure. This must be an integer between 0 and 255. Default is 1. Set to 0 to disable reconnecting on idle connection failures.
-    fn set_connect_retry_count(&mut self, value: u8) {
+    pub fn set_connect_retry_count(&mut self, value: u8) {
         self.connect_retry_count = value;
         self.keywords_in_use.push(Keyword::ConnectRetryCount);
     }
     /// Amount of time (in seconds) between each reconnection attempt after identifying that there was an idle connection failure. This must be an integer between 1 and 60. The default is 10 seconds.
-    fn set_connect_retry_interval(&mut self, value: u8) {
+    pub fn set_connect_retry_interval(&mut self, value: u8) {
         self.connect_retry_interval = value;
         self.keywords_in_use.push(Keyword::ConnectRetryInterval);
     }
     /// The length of time (in seconds) to wait for a connection to the server before terminating the attempt and generating an error.
-    fn set_connect_timeout(&mut self, value: u16) {
+    pub fn set_connect_timeout(&mut self, value: u16) {
         self.connect_timeout = value;
         self.keywords_in_use.push(Keyword::ConnectTimeout);
     }
     /// The SQL Server Language record name.
-    fn set_current_language(&mut self, value: Option<String>) {
+    pub fn set_current_language(&mut self, value: Option<String>) {
         self.current_language = value;
         self.keywords_in_use.push(Keyword::CurrentLanguage);
     }
     /// The name or network address of the instance of SQL Server to connect to.
-    fn set_data_source(&mut self, value: Option<String>) {
+    pub fn set_data_source(&mut self, value: Option<String>) {
         self.data_source = value;
         self.keywords_in_use.push(Keyword::DataSource);
     }
     /// ?
-    fn set_enclave_attestation_url(&mut self, value: Option<String>) {
+    pub fn set_enclave_attestation_url(&mut self, value: Option<String>) {
         self.enclave_attestation_url = value;
         self.keywords_in_use.push(Keyword::EnclaveAttestationUrl);
     }
     /// Whether SQL Server uses SSL encryption for all data sent between the client and server if the server has a certificate installed.
-    fn set_encrypt(&mut self, value: bool) {
+    pub fn set_encrypt(&mut self, value: bool) {
         self.encrypt = value;
         self.keywords_in_use.push(Keyword::Encrypt);
     }
     /// Whether the SQL Server connection pooler automatically enlists the connection in the creation thread's current transaction context.
-    fn set_enlist(&mut self, value: bool) {
+    pub fn set_enlist(&mut self, value: bool) {
         self.enlist = value;
         self.keywords_in_use.push(Keyword::Enlist);
     }
     /// The name or address of the partner server to connect to if the primary server is down.
-    fn set_failover_partner(&mut self, value: Option<String>) {
+    pub fn set_failover_partner(&mut self, value: Option<String>) {
         self.failover_partner = value;
         self.keywords_in_use.push(Keyword::FailoverPartner);
     }
     /// The name of the database associated with the connection.
-    fn set_initial_catalog(&mut self, value: Option<String>) {
+    pub fn set_initial_catalog(&mut self, value: Option<String>) {
         self.initial_catalog = value;
         self.keywords_in_use.push(Keyword::InitialCatalog);
     }
     /// Whether User ID and Password are specified in the connection (when false) or whether the current Windows account credentials are used for authentication (when true).
-    fn set_integrated_security(&mut self, value: bool) {
+    pub fn set_integrated_security(&mut self, value: bool) {
         self.integrated_security = value;
         self.keywords_in_use.push(Keyword::IntegratedSecurity);
     }
     /// ?
-    fn set_ip_address_preference(&mut self, value: SqlConnectionIpAddressPreference) {
+    pub fn set_ip_address_preference(&mut self, value: SqlConnectionIpAddressPreference) {
         self.ip_address_preference = value;
         self.keywords_in_use.push(Keyword::IpAddressPreference);
     }
     /// ??
-    fn set_load_balance_timeout(&mut self, value: u16) {
+    pub fn set_load_balance_timeout(&mut self, value: u16) {
         self.load_balance_timeout = value;
         self.keywords_in_use.push(Keyword::LoadBalanceTimeout);
     }
     /// The maximum number of connections allowed in the connection pool for this specific connection string.
-    fn set_max_pool_size(&mut self, value: u8) {
+    pub fn set_max_pool_size(&mut self, value: u8) {
         self.max_pool_size = value;
         self.keywords_in_use.push(Keyword::MaxPoolSize);
     }
     /// The minimum number of connections allowed in the connection pool for this specific connection string.
-    fn set_min_pool_size(&mut self, value: u8) {
+    pub fn set_min_pool_size(&mut self, value: u8) {
         self.min_pool_size = value;
         self.keywords_in_use.push(Keyword::MinPoolSize);
     }
     /// When true, an application can maintain multiple active result sets (MARS). When false, an application must process or cancel all result sets from one batch before it can execute any other batch on that connection.
-    fn set_multiple_active_result_sets(&mut self, value: bool) {
+    pub fn set_multiple_active_result_sets(&mut self, value: bool) {
         self.multiple_active_result_sets = value;
         self.keywords_in_use.push(Keyword::MultipleActiveResultSets);
     }
     /// If your application is connecting to an Always On availability group (AG) or Always On Failover Cluster Instance (FCI) on different subnets, setting MultiSubnetFailover=true provides faster detection of and connection to the (currently) active server.
-    fn set_multi_subnet_failover(&mut self, value: bool) {
+    pub fn set_multi_subnet_failover(&mut self, value: bool) {
         self.multi_subnet_failover = value;
         self.keywords_in_use.push(Keyword::MultiSubnetFailover);
     }
     /// The size in bytes of the network packets used to communicate with an instance of SQL Server.
-    fn set_packet_size(&mut self, value: u16) {
+    pub fn set_packet_size(&mut self, value: u16) {
         self.packet_size = value;
         self.keywords_in_use.push(Keyword::PacketSize);
     }
     /// The password for the SQL Server account.
-    fn set_password(&mut self, value: Option<SecStr>) {
+    pub fn set_password(&mut self, value: Option<SecStr>) {
         self.password = value;
         self.keywords_in_use.push(Keyword::Password);
     }
     /// Indicates if security-sensitive information, such as the password or access token, should be returned as part of the connection string on a connection created with this SqlConnectionStringBuilder after that connection has ever been in an open state.
-    fn set_persist_security_info(&mut self, value: bool) {
+    pub fn set_persist_security_info(&mut self, value: bool) {
         self.persist_security_info = value;
         self.keywords_in_use.push(Keyword::PersistSecurityInfo);
     }
     /// Whether the connection will be pooled or explicitly opened every time that the connection is requested.
-    fn set_pooling(&mut self, value: bool) {
+    pub fn set_pooling(&mut self, value: bool) {
         self.pooling = value;
         self.keywords_in_use.push(Keyword::Pooling);
     }
     /// The blocking period behavior for a connection pool.
-    fn set_pool_blocking_period(&mut self, value: PoolBlockingPeriod) {
+    pub fn set_pool_blocking_period(&mut self, value: PoolBlockingPeriod) {
         self.pool_blocking_period = value;
         self.keywords_in_use.push(Keyword::PoolBlockingPeriod);
     }
     /// Whether replication is supported using the connection.
-    fn set_replication(&mut self, value: bool) {
+    pub fn set_replication(&mut self, value: bool) {
         self.replication = value;
         self.keywords_in_use.push(Keyword::Replication);
     }
     /// Indicates how the connection maintains its association with an enlisted System.Transactions transaction.
-    fn set_transaction_binding(&mut self, value: String) {
+    pub fn set_transaction_binding(&mut self, value: String) {
         self.transaction_binding = value;
         self.keywords_in_use.push(Keyword::TransactionBinding);
     }
     /// Whether the channel will be encrypted while bypassing walking the certificate chain to validate trust.
-    fn set_trust_server_certificate(&mut self, value: bool) {
+    pub fn set_trust_server_certificate(&mut self, value: bool) {
         self.trust_server_certificate = value;
         self.keywords_in_use.push(Keyword::TrustServerCertificate);
     }
     /// Indicates the type system the application expects.
-    fn set_type_system_version(&mut self, value: String) {
+    pub fn set_type_system_version(&mut self, value: String) {
         self.type_system_version = value;
         self.keywords_in_use.push(Keyword::TypeSystemVersion);
     }
     /// The user ID to be used when connecting to SQL Server.
-    fn set_user_id(&mut self, value: Option<String>) {
+    pub fn set_user_id(&mut self, value: Option<String>) {
         self.user_id = value;
         self.keywords_in_use.push(Keyword::UserId);
     }
     /// The name of the workstation connecting to SQL Server.
-    fn set_workstation_id(&mut self, value: Option<String>) {
+    pub fn set_workstation_id(&mut self, value: Option<String>) {
         self.workstation_id = value;
         self.keywords_in_use.push(Keyword::WorkstationId);
     }
     /// Gets or sets a value that indicates whether to redirect the connection from the default SQL Server Express instance to a runtime-initiated instance running under the account of the caller.
-    fn set_user_instance(&mut self, value: bool) {
+    pub fn set_user_instance(&mut self, value: bool) {
         self.user_instance = value;
         self.keywords_in_use.push(Keyword::UserInstance);
     }
@@ -821,7 +821,6 @@ impl TryFrom<&str> for SqlConnectionStringBuilder {
 
     /// Parses a connection string into a connection string builder.
     fn try_from(connection_string: &str) -> Result<Self, Self::Error> {
-        log::debug!("try_from - connection_string = {:?}", connection_string);
         // Create the default connection string builder
         let mut connection_string_builder = SqlConnectionStringBuilder::default();
         // Connection strings are of the format "NameA = ValueA;NameB = ValueB".
@@ -835,7 +834,6 @@ impl TryFrom<&str> for SqlConnectionStringBuilder {
                 let keyword = lowercase_key.as_str();
                 // Get the value, trimmed.
                 let value = value.trim();
-                log::debug!(" - got keyword {:?}, value = {:?}", keyword, value);
                 // Check the keyword against the keywords we know
                 match keyword {
                     "application intent" | "applicationintent" => {
