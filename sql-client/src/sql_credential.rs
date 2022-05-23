@@ -3,7 +3,7 @@ use crate::sql_client_error::SqlClientError;
 use secstr::SecStr;
 
 /// User login credentials.
-struct SqlCredential {
+pub struct SqlCredential {
     /// The user's ID.
     user_id: String,
     /// The user's password.

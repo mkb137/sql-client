@@ -2,7 +2,7 @@ use crate::sql_client_error::SqlClientError;
 use std::fmt::{Display, Formatter};
 
 #[derive(PartialEq, Debug)]
-pub(crate) enum ApplicationIntent {
+pub enum ApplicationIntent {
     /// The application workload type when connecting to a server is read write.
     ReadWrite = 0,
     /// The application workload type when connecting to a server is read only.

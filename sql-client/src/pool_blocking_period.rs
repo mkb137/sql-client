@@ -3,7 +3,7 @@ use std::fmt::{Display, Formatter};
 
 /// ?
 #[derive(PartialEq, Debug)]
-pub(crate) enum PoolBlockingPeriod {
+pub enum PoolBlockingPeriod {
     // Blocking period OFF for Azure SQL servers, but ON for all other SQL servers.
     Auto = 0,
     // Blocking period ON for all SQL servers including Azure SQL servers.

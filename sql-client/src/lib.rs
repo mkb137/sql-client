@@ -2,13 +2,23 @@
 #![allow(unused_variables)]
 #![allow(unused_imports)]
 
-mod application_intent;
-mod pool_blocking_period;
-mod sql_authentication_method;
-mod sql_client_error;
-mod sql_column_encryption_setting;
-mod sql_connection_ip_address_preference;
-mod sql_connection_string_builder;
-mod sql_credential;
+pub mod application_intent;
+pub mod pool_blocking_period;
+pub mod sql_authentication_method;
+pub mod sql_client_error;
+pub mod sql_column_encryption_setting;
+pub mod sql_connection;
+pub mod sql_connection_ip_address_preference;
+pub mod sql_connection_string_builder;
+pub mod sql_credential;
 pub(crate) mod tds_enums;
 mod test_init;
+
+// Re-exports
+pub use application_intent::ApplicationIntent;
+pub use pool_blocking_period::PoolBlockingPeriod;
+pub use sql_authentication_method::SqlAuthenticationMethod;
+pub use sql_client_error::SqlClientError;
+pub use sql_column_encryption_setting::SqlConnectionColumnEncryptionSetting;
+pub use sql_connection_ip_address_preference::SqlConnectionIpAddressPreference;
+pub use sql_connection_string_builder::SqlConnectionStringBuilder;

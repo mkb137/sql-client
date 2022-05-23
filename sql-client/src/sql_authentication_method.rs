@@ -3,7 +3,7 @@ use std::fmt::{Display, Formatter};
 
 /// Describes the different SQL authentication methods that can be used by a client connecting to Azure SQL Database
 #[derive(PartialEq, Debug)]
-pub(crate) enum SqlAuthenticationMethod {
+pub enum SqlAuthenticationMethod {
     /// The authentication method is not specified.
     NotSpecified,
     /// The authentication method is Sql Password.

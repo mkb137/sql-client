@@ -3,7 +3,7 @@ use std::fmt::{Display, Formatter};
 
 /// ?
 #[derive(PartialEq, Debug)]
-pub(crate) enum SqlConnectionIpAddressPreference {
+pub enum SqlConnectionIpAddressPreference {
     IPv4First = 0, // default
     IPv6First = 1,
     UsePlatformDefault = 2,

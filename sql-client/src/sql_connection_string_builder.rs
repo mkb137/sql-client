@@ -1,9 +1,8 @@
 //! Creates a SQL connection string.
 //!
 //!
-use crate::sql_client_error::SqlClientError;
 use crate::{
-    ApplicationIntent, PoolBlockingPeriod, SqlAuthenticationMethod,
+    ApplicationIntent, PoolBlockingPeriod, SqlAuthenticationMethod, SqlClientError,
     SqlConnectionColumnEncryptionSetting, SqlConnectionIpAddressPreference,
 };
 use std::collections::{HashMap, HashSet};
@@ -148,7 +147,7 @@ fn convert_to_integrated_security(value: &str) -> Result<bool, SqlClientError> {
 }
 
 ///
-struct SqlConnectionStringBuilder {
+pub struct SqlConnectionStringBuilder {
     /// Declares the application workload type when connecting to a database in an SQL Server Availability Group.
     application_intent: ApplicationIntent,
     /// The name of the application associated with the connection string.

@@ -3,7 +3,7 @@ use std::fmt::{Display, Formatter};
 
 /// ?
 #[derive(PartialEq, Debug)]
-pub(crate) enum SqlConnectionColumnEncryptionSetting {
+pub enum SqlConnectionColumnEncryptionSetting {
     Disabled = 0,
     Enabled = 1,
 }
