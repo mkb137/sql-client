@@ -8,6 +8,7 @@ pub(crate) mod db_connection_internal;
 pub(crate) mod db_connection_pool;
 pub(crate) mod db_connection_string_defaults;
 pub(crate) mod db_connection_string_keywords;
+pub(crate) mod db_connection_string_utils;
 pub mod pool_blocking_period;
 pub mod sql_authentication_method;
 pub mod sql_client_error;
@@ -19,6 +20,8 @@ pub mod sql_credential;
 pub(crate) mod tds_enums;
 mod test_init;
 mod transaction;
+mod transaction_binding;
+mod type_system;
 
 // Re-exports
 pub use application_intent::ApplicationIntent;

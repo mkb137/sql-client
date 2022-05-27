@@ -2,8 +2,10 @@
 //!
 //!
 use super::db_connection_string_defaults::DbConnectionStringDefaults;
-use super::db_connection_string_keywords::DbConnectionStringKeywords;
-use super::db_connection_string_keywords::DbConnectionStringKeywordsLower;
+use super::db_connection_string_keywords::{
+    DbConnectionStringKeywords, DbConnectionStringKeywordsLower,
+};
+use super::db_connection_string_utils::*;
 use crate::{
     ApplicationIntent, PoolBlockingPeriod, SqlAuthenticationMethod, SqlClientError,
     SqlConnectionColumnEncryptionSetting, SqlConnectionIpAddressPreference,
@@ -86,30 +88,6 @@ fn append_bool(connection_string: &mut String, keyword: &str, value: bool) {
 fn append_opt(connection_string: &mut String, keyword: &str, value: Option<String>) {
     if let Some(v) = value {
         append_str(connection_string, keyword, v);
-    }
-}
-
-/// Converts a true/false/yes/no string to a boolean.
-fn convert_to_boolean(value: &str) -> Result<bool, SqlClientError> {
-    match value.trim().to_lowercase().as_str() {
-        "true" | "yes" => Ok(true),
-        "false" | "no" => Ok(false),
-        _ => Err(SqlClientError::UnsupportedValue(
-            "boolean".to_string(),
-            value.to_string(),
-        )),
-    }
-}
-
-/// Converts a true/false/yes/no/sspi string to a boolean.
-fn convert_to_integrated_security(value: &str) -> Result<bool, SqlClientError> {
-    match value.trim().to_lowercase().as_str() {
-        "true" | "yes" | "sspi" => Ok(true),
-        "false" | "no" => Ok(false),
-        _ => Err(SqlClientError::UnsupportedValue(
-            "Integrated Security".to_string(),
-            value.to_string(),
-        )),
     }
 }
 
@@ -790,45 +768,41 @@ impl SqlConnectionStringBuilder {
 impl Default for SqlConnectionStringBuilder {
     fn default() -> Self {
         Self {
-            application_intent: DbConnectionStringDefaults::DEFAULT_APPLICATION_INTENT,
-            application_name: DbConnectionStringDefaults::DEFAULT_APPLICATION_NAME.to_string(),
-            attach_db_filename: DbConnectionStringDefaults::DEFAULT_ATTACH_DB_FILENAME,
-            authentication: DbConnectionStringDefaults::DEFAULT_AUTHENTICATION,
-            column_encryption_setting:
-                DbConnectionStringDefaults::DEFAULT_COLUMN_ENCRYPTION_SETTING,
-            command_timeout: DbConnectionStringDefaults::DEFAULT_COMMAND_TIMEOUT,
-            connect_retry_count: DbConnectionStringDefaults::DEFAULT_CONNECT_RETRY_COUNT,
-            connect_retry_interval: DbConnectionStringDefaults::DEFAULT_CONNECT_RETRY_INTERVAL,
-            connect_timeout: DbConnectionStringDefaults::DEFAULT_CONNECT_TIMEOUT,
-            current_language: DbConnectionStringDefaults::DEFAULT_CURRENT_LANGUAGE,
-            data_source: DbConnectionStringDefaults::DEFAULT_DATA_SOURCE,
-            enclave_attestation_url: DbConnectionStringDefaults::DEFAULT_ENCLAVE_ATTESTATION_URL,
-            encrypt: DbConnectionStringDefaults::DEFAULT_ENCRYPT,
-            enlist: DbConnectionStringDefaults::DEFAULT_ENLIST,
-            failover_partner: DbConnectionStringDefaults::DEFAULT_FAILOVER_PARTNER,
-            initial_catalog: DbConnectionStringDefaults::DEFAULT_INITIAL_CATALOG,
-            integrated_security: DbConnectionStringDefaults::DEFAULT_INTEGRATED_SECURITY,
-            ip_address_preference: DbConnectionStringDefaults::DEFAULT_IP_ADDRESS_PREFERENCE,
-            load_balance_timeout: DbConnectionStringDefaults::DEFAULT_LOAD_BALANCE_TIMEOUT,
-            max_pool_size: DbConnectionStringDefaults::DEFAULT_MAX_POOL_SIZE,
-            min_pool_size: DbConnectionStringDefaults::DEFAULT_MIN_POOL_SIZE,
-            multiple_active_result_sets:
-                DbConnectionStringDefaults::DEFAULT_MULTIPLE_ACTIVE_RESULT_SETS,
-            multi_subnet_failover: DbConnectionStringDefaults::DEFAULT_MULTI_SUBNET_FAILOVER,
-            packet_size: DbConnectionStringDefaults::DEFAULT_PACKET_SIZE,
-            password: DbConnectionStringDefaults::DEFAULT_PASSWORD,
-            persist_security_info: DbConnectionStringDefaults::DEFAULT_PERSIST_SECURITY_INFO,
-            pooling: DbConnectionStringDefaults::DEFAULT_POOLING,
-            pool_blocking_period: DbConnectionStringDefaults::DEFAULT_POOL_BLOCKING_PERIOD,
-            replication: DbConnectionStringDefaults::DEFAULT_REPLICATION,
-            transaction_binding: DbConnectionStringDefaults::DEFAULT_TRANSACTION_BINDING
-                .to_string(),
-            type_system_version: DbConnectionStringDefaults::DEFAULT_TYPE_SYSTEM_VERSION
-                .to_string(),
-            user_id: DbConnectionStringDefaults::DEFAULT_USER_ID,
-            workstation_id: DbConnectionStringDefaults::DEFAULT_WORKSTATION_ID,
-            trust_server_certificate: DbConnectionStringDefaults::DEFAULT_TRUST_SERVER_CERTIFICATE,
-            user_instance: DbConnectionStringDefaults::DEFAULT_USER_INSTANCE,
+            application_intent: DbConnectionStringDefaults::APPLICATION_INTENT,
+            application_name: DbConnectionStringDefaults::APPLICATION_NAME.to_string(),
+            attach_db_filename: DbConnectionStringDefaults::ATTACH_DB_FILENAME,
+            authentication: DbConnectionStringDefaults::AUTHENTICATION,
+            column_encryption_setting: DbConnectionStringDefaults::COLUMN_ENCRYPTION_SETTING,
+            command_timeout: DbConnectionStringDefaults::COMMAND_TIMEOUT,
+            connect_retry_count: DbConnectionStringDefaults::CONNECT_RETRY_COUNT,
+            connect_retry_interval: DbConnectionStringDefaults::CONNECT_RETRY_INTERVAL,
+            connect_timeout: DbConnectionStringDefaults::CONNECT_TIMEOUT,
+            current_language: DbConnectionStringDefaults::CURRENT_LANGUAGE,
+            data_source: DbConnectionStringDefaults::DATA_SOURCE,
+            enclave_attestation_url: DbConnectionStringDefaults::ENCLAVE_ATTESTATION_URL,
+            encrypt: DbConnectionStringDefaults::ENCRYPT,
+            enlist: DbConnectionStringDefaults::ENLIST,
+            failover_partner: DbConnectionStringDefaults::FAILOVER_PARTNER,
+            initial_catalog: DbConnectionStringDefaults::INITIAL_CATALOG,
+            integrated_security: DbConnectionStringDefaults::INTEGRATED_SECURITY,
+            ip_address_preference: DbConnectionStringDefaults::IP_ADDRESS_PREFERENCE,
+            load_balance_timeout: DbConnectionStringDefaults::LOAD_BALANCE_TIMEOUT,
+            max_pool_size: DbConnectionStringDefaults::MAX_POOL_SIZE,
+            min_pool_size: DbConnectionStringDefaults::MIN_POOL_SIZE,
+            multiple_active_result_sets: DbConnectionStringDefaults::MULTIPLE_ACTIVE_RESULT_SETS,
+            multi_subnet_failover: DbConnectionStringDefaults::MULTI_SUBNET_FAILOVER,
+            packet_size: DbConnectionStringDefaults::PACKET_SIZE,
+            password: DbConnectionStringDefaults::PASSWORD,
+            persist_security_info: DbConnectionStringDefaults::PERSIST_SECURITY_INFO,
+            pooling: DbConnectionStringDefaults::POOLING,
+            pool_blocking_period: DbConnectionStringDefaults::POOL_BLOCKING_PERIOD,
+            replication: DbConnectionStringDefaults::REPLICATION,
+            transaction_binding: DbConnectionStringDefaults::TRANSACTION_BINDING.to_string(),
+            type_system_version: DbConnectionStringDefaults::TYPE_SYSTEM_VERSION.to_string(),
+            user_id: DbConnectionStringDefaults::USER_ID,
+            workstation_id: DbConnectionStringDefaults::WORKSTATION_ID,
+            trust_server_certificate: DbConnectionStringDefaults::TRUST_SERVER_CERTIFICATE,
+            user_instance: DbConnectionStringDefaults::USER_INSTANCE,
             keywords_in_use: Vec::new(),
         }
     }
@@ -854,179 +828,179 @@ impl TryFrom<&str> for SqlConnectionStringBuilder {
                 let value = value.trim();
                 // Check the keyword against the keywords we know
                 match keyword {
-                    DbConnectionStringKeywordsLower::APPLICATION_INTENT_LOWER
-                    | DbConnectionStringKeywordsLower::APPLICATION_INTENT_ALT_LOWER => {
+                    DbConnectionStringKeywordsLower::APPLICATION_INTENT
+                    | DbConnectionStringKeywordsLower::APPLICATION_INTENT_ALT => {
                         let application_intent: ApplicationIntent = value.try_into()?;
                         connection_string_builder.set_application_intent(application_intent);
                     }
-                    DbConnectionStringKeywordsLower::APPLICATION_NAME_LOWER
-                    | DbConnectionStringKeywordsLower::APPLICATION_NAME_ALT_LOWER => {
+                    DbConnectionStringKeywordsLower::APPLICATION_NAME
+                    | DbConnectionStringKeywordsLower::APPLICATION_NAME_ALT => {
                         connection_string_builder.set_application_name(value.to_string());
                     }
-                    DbConnectionStringKeywordsLower::ATTACH_DB_FILENAME_LOWER
-                    | DbConnectionStringKeywordsLower::ATTACH_DB_FILENAME_ALT_LOWER => {
+                    DbConnectionStringKeywordsLower::ATTACH_DB_FILENAME
+                    | DbConnectionStringKeywordsLower::ATTACH_DB_FILENAME_ALT => {
                         connection_string_builder.set_attach_db_filename(Some(value.to_string()));
                     }
-                    DbConnectionStringKeywordsLower::AUTHENTICATION_LOWER => {
+                    DbConnectionStringKeywordsLower::AUTHENTICATION => {
                         let authentication: SqlAuthenticationMethod = value.try_into()?;
                         connection_string_builder.set_authentication(authentication);
                     }
-                    DbConnectionStringKeywordsLower::COLUMN_ENCRYPTION_SETTING_LOWER => {
+                    DbConnectionStringKeywordsLower::COLUMN_ENCRYPTION_SETTING => {
                         let column_encrpytion_setting: SqlConnectionColumnEncryptionSetting =
                             value.try_into()?;
                         connection_string_builder
                             .set_column_encryption_setting(column_encrpytion_setting);
                     }
-                    DbConnectionStringKeywordsLower::COMMAND_TIMEOUT_LOWER => {
+                    DbConnectionStringKeywordsLower::COMMAND_TIMEOUT => {
                         let command_timeout: u16 = value.parse().map_err(|_| {
                             SqlClientError::UnsupportedValue("u16".to_string(), value.to_string())
                         })?;
                         connection_string_builder.set_command_timeout(command_timeout);
                     }
-                    DbConnectionStringKeywordsLower::CONNECT_RETRY_COUNT_LOWER
-                    | DbConnectionStringKeywordsLower::CONNECT_RETRY_COUNT_ALT_LOWER => {
+                    DbConnectionStringKeywordsLower::CONNECT_RETRY_COUNT
+                    | DbConnectionStringKeywordsLower::CONNECT_RETRY_COUNT_ALT => {
                         let connect_retry_count: u8 = value.parse().map_err(|_| {
                             SqlClientError::UnsupportedValue("u8".to_string(), value.to_string())
                         })?;
                         connection_string_builder.set_connect_retry_count(connect_retry_count);
                     }
-                    DbConnectionStringKeywordsLower::CONNECT_RETRY_INTERVAL_LOWER
-                    | DbConnectionStringKeywordsLower::CONNECT_RETRY_INTERVAL_ALT_LOWER => {
+                    DbConnectionStringKeywordsLower::CONNECT_RETRY_INTERVAL
+                    | DbConnectionStringKeywordsLower::CONNECT_RETRY_INTERVAL_ALT => {
                         let connect_retry_interval: u8 = value.parse().map_err(|_| {
                             SqlClientError::UnsupportedValue("u8".to_string(), value.to_string())
                         })?;
                         connection_string_builder
                             .set_connect_retry_interval(connect_retry_interval);
                     }
-                    DbConnectionStringKeywordsLower::CONNECT_TIMEOUT_LOWER
-                    | DbConnectionStringKeywordsLower::CONNECT_TIMEOUT_ALT1_LOWER
-                    | DbConnectionStringKeywordsLower::CONNECT_TIMEOUT_ALT2_LOWER => {
+                    DbConnectionStringKeywordsLower::CONNECT_TIMEOUT
+                    | DbConnectionStringKeywordsLower::CONNECT_TIMEOUT_ALT1
+                    | DbConnectionStringKeywordsLower::CONNECT_TIMEOUT_ALT2 => {
                         let connect_timeout: u16 = value.parse().map_err(|_| {
                             SqlClientError::UnsupportedValue("u16".to_string(), value.to_string())
                         })?;
                         connection_string_builder.set_connect_timeout(connect_timeout);
                     }
-                    DbConnectionStringKeywordsLower::CURRENT_LANGUAGE_LOWER
-                    | DbConnectionStringKeywordsLower::CURRENT_LANGUAGE_ALT_LOWER => {
+                    DbConnectionStringKeywordsLower::CURRENT_LANGUAGE
+                    | DbConnectionStringKeywordsLower::CURRENT_LANGUAGE_ALT => {
                         connection_string_builder.set_current_language(Some(value.to_string()));
                     }
-                    DbConnectionStringKeywordsLower::DATA_SOURCE_LOWER
-                    | DbConnectionStringKeywordsLower::DATA_SOURCE_ALT1_LOWER
-                    | DbConnectionStringKeywordsLower::DATA_SOURCE_ALT2_LOWER
-                    | DbConnectionStringKeywordsLower::DATA_SOURCE_ALT3_LOWER
-                    | DbConnectionStringKeywordsLower::DATA_SOURCE_ALT4_LOWER => {
+                    DbConnectionStringKeywordsLower::DATA_SOURCE
+                    | DbConnectionStringKeywordsLower::DATA_SOURCE_ALT1
+                    | DbConnectionStringKeywordsLower::DATA_SOURCE_ALT2
+                    | DbConnectionStringKeywordsLower::DATA_SOURCE_ALT3
+                    | DbConnectionStringKeywordsLower::DATA_SOURCE_ALT4 => {
                         connection_string_builder.set_data_source(Some(value.to_string()));
                     }
-                    DbConnectionStringKeywordsLower::ENCLAVE_ATTESTATION_URL_LOWER => {
+                    DbConnectionStringKeywordsLower::ENCLAVE_ATTESTATION_URL => {
                         connection_string_builder
                             .set_enclave_attestation_url(Some(value.to_string()));
                     }
-                    DbConnectionStringKeywordsLower::ENCRYPT_LOWER => {
+                    DbConnectionStringKeywordsLower::ENCRYPT => {
                         let encrypt = convert_to_boolean(value)?;
                         connection_string_builder.set_encrypt(encrypt);
                     }
-                    DbConnectionStringKeywordsLower::ENLIST_LOWER => {
+                    DbConnectionStringKeywordsLower::ENLIST => {
                         let enlist = convert_to_boolean(value)?;
                         connection_string_builder.set_enlist(enlist);
                     }
-                    DbConnectionStringKeywordsLower::FAILOVER_PARTNER_LOWER => {
+                    DbConnectionStringKeywordsLower::FAILOVER_PARTNER => {
                         connection_string_builder.set_failover_partner(Some(value.to_string()));
                     }
-                    DbConnectionStringKeywordsLower::INITIAL_CATALOG_LOWER
-                    | DbConnectionStringKeywordsLower::INITIAL_CATALOG_ALT_LOWER => {
+                    DbConnectionStringKeywordsLower::INITIAL_CATALOG
+                    | DbConnectionStringKeywordsLower::INITIAL_CATALOG_ALT => {
                         connection_string_builder.set_initial_catalog(Some(value.to_string()));
                     }
-                    DbConnectionStringKeywordsLower::INTEGRATED_SECURITY_LOWER
-                    | DbConnectionStringKeywordsLower::INTEGRATED_SECURITY_ALT_LOWER => {
+                    DbConnectionStringKeywordsLower::INTEGRATED_SECURITY
+                    | DbConnectionStringKeywordsLower::INTEGRATED_SECURITY_ALT => {
                         let integrated_security = convert_to_integrated_security(value)?;
                         connection_string_builder.set_integrated_security(integrated_security);
                     }
-                    DbConnectionStringKeywordsLower::IP_ADDRESS_PREFERENCE_LOWER
-                    | DbConnectionStringKeywordsLower::IP_ADDRESS_PREFERENCE_ALT_LOWER => {
+                    DbConnectionStringKeywordsLower::IP_ADDRESS_PREFERENCE
+                    | DbConnectionStringKeywordsLower::IP_ADDRESS_PREFERENCE_ALT => {
                         let ip_address_preference: SqlConnectionIpAddressPreference =
                             value.try_into()?;
                         connection_string_builder.set_ip_address_preference(ip_address_preference);
                     }
-                    DbConnectionStringKeywordsLower::LOAD_BALANCE_TIMEOUT_LOWER
-                    | DbConnectionStringKeywordsLower::LOAD_BALANCE_TIMEOUT_ALT_LOWER => {
+                    DbConnectionStringKeywordsLower::LOAD_BALANCE_TIMEOUT
+                    | DbConnectionStringKeywordsLower::LOAD_BALANCE_TIMEOUT_ALT => {
                         let load_balance_timeout: u16 = value.parse().map_err(|_| {
                             SqlClientError::UnsupportedValue("u16".to_string(), value.to_string())
                         })?;
                         connection_string_builder.set_load_balance_timeout(load_balance_timeout);
                     }
-                    DbConnectionStringKeywordsLower::MAX_POOL_SIZE_LOWER => {
+                    DbConnectionStringKeywordsLower::MAX_POOL_SIZE => {
                         let max_pool_size: u8 = value.parse().map_err(|_| {
                             SqlClientError::UnsupportedValue("u16".to_string(), value.to_string())
                         })?;
                         connection_string_builder.set_max_pool_size(max_pool_size);
                     }
-                    DbConnectionStringKeywordsLower::MIN_POOL_SIZE_LOWER => {
+                    DbConnectionStringKeywordsLower::MIN_POOL_SIZE => {
                         let min_pool_size: u8 = value.parse().map_err(|_| {
                             SqlClientError::UnsupportedValue("u16".to_string(), value.to_string())
                         })?;
                         connection_string_builder.set_min_pool_size(min_pool_size);
                     }
-                    DbConnectionStringKeywordsLower::MULTIPLE_ACTIVE_RESULT_SETS_LOWER
-                    | DbConnectionStringKeywordsLower::MULTIPLE_ACTIVE_RESULT_SETS_ALT_LOWER => {
+                    DbConnectionStringKeywordsLower::MULTIPLE_ACTIVE_RESULT_SETS
+                    | DbConnectionStringKeywordsLower::MULTIPLE_ACTIVE_RESULT_SETS_ALT => {
                         let multiple_active_result_sets = convert_to_boolean(value)?;
                         connection_string_builder
                             .set_multiple_active_result_sets(multiple_active_result_sets);
                     }
-                    DbConnectionStringKeywordsLower::MULTI_SUBNET_FAILOVER_LOWER
-                    | DbConnectionStringKeywordsLower::MULTI_SUBNET_FAILOVER_ALT_LOWER => {
+                    DbConnectionStringKeywordsLower::MULTI_SUBNET_FAILOVER
+                    | DbConnectionStringKeywordsLower::MULTI_SUBNET_FAILOVER_ALT => {
                         let multi_subnet_failover = convert_to_boolean(value)?;
                         connection_string_builder.set_multi_subnet_failover(multi_subnet_failover);
                     }
-                    DbConnectionStringKeywordsLower::PACKET_SIZE_LOWER => {
+                    DbConnectionStringKeywordsLower::PACKET_SIZE => {
                         let packet_size: u16 = value.parse().map_err(|_| {
                             SqlClientError::UnsupportedValue("u16".to_string(), value.to_string())
                         })?;
                         connection_string_builder.set_packet_size(packet_size);
                     }
-                    DbConnectionStringKeywordsLower::PASSWORD_LOWER
-                    | DbConnectionStringKeywordsLower::PASSWORD_ALT_LOWER => {
+                    DbConnectionStringKeywordsLower::PASSWORD
+                    | DbConnectionStringKeywordsLower::PASSWORD_ALT => {
                         connection_string_builder.set_password(Some(SecStr::from(value)));
                     }
-                    DbConnectionStringKeywordsLower::PERSIST_SECURITY_INFO_LOWER
-                    | DbConnectionStringKeywordsLower::PERSIST_SECURITY_INFO_ALT_LOWER => {
+                    DbConnectionStringKeywordsLower::PERSIST_SECURITY_INFO
+                    | DbConnectionStringKeywordsLower::PERSIST_SECURITY_INFO_ALT => {
                         let persist_security_info = convert_to_boolean(value)?;
                         connection_string_builder.set_persist_security_info(persist_security_info);
                     }
-                    DbConnectionStringKeywordsLower::POOLING_LOWER => {
+                    DbConnectionStringKeywordsLower::POOLING => {
                         let pooling = convert_to_boolean(value)?;
                         connection_string_builder.set_pooling(pooling);
                     }
-                    DbConnectionStringKeywordsLower::POOL_BLOCKING_PERIOD_LOWER
-                    | DbConnectionStringKeywordsLower::POOL_BLOCKING_PERIOD_ALT_LOWER => {
+                    DbConnectionStringKeywordsLower::POOL_BLOCKING_PERIOD
+                    | DbConnectionStringKeywordsLower::POOL_BLOCKING_PERIOD_ALT => {
                         let pool_blocking_period: PoolBlockingPeriod = value.try_into()?;
                         connection_string_builder.set_pool_blocking_period(pool_blocking_period);
                     }
-                    DbConnectionStringKeywordsLower::REPLICATION_LOWER => {
+                    DbConnectionStringKeywordsLower::REPLICATION => {
                         let replication = convert_to_boolean(value)?;
                         connection_string_builder.set_replication(replication);
                     }
-                    DbConnectionStringKeywordsLower::TRANSACTION_BINDING_LOWER => {
+                    DbConnectionStringKeywordsLower::TRANSACTION_BINDING => {
                         connection_string_builder.set_transaction_binding(value.to_string());
                     }
-                    DbConnectionStringKeywordsLower::TRUST_SERVER_CERTIFICATE_LOWER
-                    | DbConnectionStringKeywordsLower::TRUST_SERVER_CERTIFICATE_ALT_LOWER => {
+                    DbConnectionStringKeywordsLower::TRUST_SERVER_CERTIFICATE
+                    | DbConnectionStringKeywordsLower::TRUST_SERVER_CERTIFICATE_ALT => {
                         let trust_server_certificate = convert_to_boolean(value)?;
                         connection_string_builder
                             .set_trust_server_certificate(trust_server_certificate);
                     }
-                    DbConnectionStringKeywordsLower::TYPE_SYSTEM_VERSION_LOWER => {
+                    DbConnectionStringKeywordsLower::TYPE_SYSTEM_VERSION => {
                         connection_string_builder.set_type_system_version(value.to_string());
                     }
-                    DbConnectionStringKeywordsLower::USER_ID_LOWER
-                    | DbConnectionStringKeywordsLower::USER_ID_ALT1_LOWER
-                    | DbConnectionStringKeywordsLower::USER_ID_ALT2_LOWER => {
+                    DbConnectionStringKeywordsLower::USER_ID
+                    | DbConnectionStringKeywordsLower::USER_ID_ALT1
+                    | DbConnectionStringKeywordsLower::USER_ID_ALT2 => {
                         connection_string_builder.set_user_id(Some(value.to_string()));
                     }
-                    DbConnectionStringKeywordsLower::WORKSTATION_ID_LOWER
-                    | DbConnectionStringKeywordsLower::WORKSTATION_ALT_ID_LOWER => {
+                    DbConnectionStringKeywordsLower::WORKSTATION_ID
+                    | DbConnectionStringKeywordsLower::WORKSTATION_ALT_ID => {
                         connection_string_builder.set_workstation_id(Some(value.to_string()));
                     }
-                    DbConnectionStringKeywordsLower::USER_INSTANCE_LOWER => {
+                    DbConnectionStringKeywordsLower::USER_INSTANCE => {
                         let user_instance = convert_to_boolean(value)?;
                         connection_string_builder.set_user_instance(user_instance);
                     }
@@ -1055,53 +1029,6 @@ mod tests {
     use super::*;
     use crate::ApplicationIntent;
     use rstest;
-
-    #[rstest::rstest]
-    #[case("yes", true)]
-    #[case("YES", true)]
-    #[case(" YeS ", true)]
-    #[case("true", true)]
-    #[case("TRUE", true)]
-    #[case(" TrUe ", true)]
-    #[case("no", false)]
-    #[case("NO", false)]
-    #[case("No", false)]
-    #[case(" No ", false)]
-    #[case("false", false)]
-    #[case("FALSE", false)]
-    #[case("False", false)]
-    #[case(" FaLsE ", false)]
-    fn test_convert_to_boolean(#[case] value: &str, #[case] expected: bool) {
-        match convert_to_boolean(value) {
-            Ok(actual) => assert_eq!(expected, actual),
-            Err(e) => assert!(false, "Expected: Ok, Actual: Err"),
-        }
-    }
-
-    #[rstest::rstest]
-    #[case("sspi", true)]
-    #[case("SSPI", true)]
-    #[case(" SsPi ", true)]
-    #[case("yes", true)]
-    #[case("YES", true)]
-    #[case(" YeS ", true)]
-    #[case("true", true)]
-    #[case("TRUE", true)]
-    #[case(" TrUe ", true)]
-    #[case("no", false)]
-    #[case("NO", false)]
-    #[case("No", false)]
-    #[case(" No ", false)]
-    #[case("false", false)]
-    #[case("FALSE", false)]
-    #[case("False", false)]
-    #[case(" FaLsE ", false)]
-    fn test_convert_to_integrated_security(#[case] value: &str, #[case] expected: bool) {
-        match convert_to_integrated_security(value) {
-            Ok(actual) => assert_eq!(expected, actual),
-            Err(e) => assert!(false, "Expected: Ok, Actual: Err"),
-        }
-    }
 
     #[rstest::rstest]
     #[case("Application Intent=ReadWrite", "Application Intent=ReadWrite")]

@@ -1,5 +1,6 @@
 /// Connection String validation pub constants.
-pub(crate) mod login_validation_rules {
+pub(crate) struct LoginValidationRules;
+impl LoginValidationRules {
     /// Maximum length of the client machine name.
     pub const MAXLEN_HOSTNAME: usize = 128; // the client machine name
     /// Maximum length of the user ID.
