@@ -3,6 +3,9 @@
 #![allow(unused_imports)]
 
 pub mod application_intent;
+pub(crate) mod connection_state;
+pub(crate) mod db_connection_internal;
+pub(crate) mod db_connection_pool;
 pub mod pool_blocking_period;
 pub mod sql_authentication_method;
 pub mod sql_client_error;
@@ -13,6 +16,7 @@ pub mod sql_connection_string_builder;
 pub mod sql_credential;
 pub(crate) mod tds_enums;
 mod test_init;
+mod transaction;
 
 // Re-exports
 pub use application_intent::ApplicationIntent;
