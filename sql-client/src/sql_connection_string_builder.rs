@@ -1,8 +1,9 @@
 //! Creates a SQL connection string.
 //!
 //!
-use super::db_connection_string_defaults::*;
-use super::db_connection_string_keywords::*;
+use super::db_connection_string_defaults::DbConnectionStringDefaults;
+use super::db_connection_string_keywords::DbConnectionStringKeywords;
+use super::db_connection_string_keywords::DbConnectionStringKeywordsLower;
 use crate::{
     ApplicationIntent, PoolBlockingPeriod, SqlAuthenticationMethod, SqlClientError,
     SqlConnectionColumnEncryptionSetting, SqlConnectionIpAddressPreference,
@@ -373,171 +374,235 @@ impl SqlConnectionStringBuilder {
                 Keyword::ApplicationIntent => {
                     append_str(
                         &mut value,
-                        APPLICATION_INTENT,
+                        DbConnectionStringKeywords::APPLICATION_INTENT,
                         self.application_intent.to_string(),
                     );
                 }
                 Keyword::ApplicationName => {
-                    append_str(&mut value, APPLICATION_NAME, self.application_name.clone());
+                    append_str(
+                        &mut value,
+                        DbConnectionStringKeywords::APPLICATION_NAME,
+                        self.application_name.clone(),
+                    );
                 }
                 Keyword::AttachDbFilename => {
                     append_opt(
                         &mut value,
-                        ATTACH_DB_FILENAME,
+                        DbConnectionStringKeywords::ATTACH_DB_FILENAME,
                         self.attach_db_filename.clone(),
                     );
                 }
                 Keyword::Authentication => {
-                    append_str(&mut value, AUTHENTICATION, self.authentication.to_string());
+                    append_str(
+                        &mut value,
+                        DbConnectionStringKeywords::AUTHENTICATION,
+                        self.authentication.to_string(),
+                    );
                 }
                 Keyword::ColumnEncryptionSetting => append_str(
                     &mut value,
-                    COLUMN_ENCRYPTION_SETTING,
+                    DbConnectionStringKeywords::COLUMN_ENCRYPTION_SETTING,
                     self.column_encryption_setting.to_string(),
                 ),
                 Keyword::ConnectRetryCount => {
                     append_str(
                         &mut value,
-                        CONNECT_RETRY_COUNT,
+                        DbConnectionStringKeywords::CONNECT_RETRY_COUNT,
                         self.connect_retry_count.to_string(),
                     );
                 }
                 Keyword::ConnectRetryInterval => append_str(
                     &mut value,
-                    CONNECT_RETRY_INTERVAL,
+                    DbConnectionStringKeywords::CONNECT_RETRY_INTERVAL,
                     self.connect_retry_interval.to_string(),
                 ),
                 Keyword::ConnectTimeout => append_str(
                     &mut value,
-                    CONNECT_TIMEOUT,
+                    DbConnectionStringKeywords::CONNECT_TIMEOUT,
                     self.connect_timeout.to_string(),
                 ),
                 Keyword::CommandTimeout => append_str(
                     &mut value,
-                    COMMAND_TIMEOUT,
+                    DbConnectionStringKeywords::COMMAND_TIMEOUT,
                     self.command_timeout.to_string(),
                 ),
                 Keyword::CurrentLanguage => {
-                    append_opt(&mut value, CURRENT_LANGUAGE, self.current_language.clone());
+                    append_opt(
+                        &mut value,
+                        DbConnectionStringKeywords::CURRENT_LANGUAGE,
+                        self.current_language.clone(),
+                    );
                 }
                 Keyword::DataSource => {
-                    append_opt(&mut value, DATA_SOURCE, self.data_source.clone());
+                    append_opt(
+                        &mut value,
+                        DbConnectionStringKeywords::DATA_SOURCE,
+                        self.data_source.clone(),
+                    );
                 }
                 Keyword::EnclaveAttestationUrl => {
                     append_opt(
                         &mut value,
-                        ENCLAVE_ATTESTATION_URL,
+                        DbConnectionStringKeywords::ENCLAVE_ATTESTATION_URL,
                         self.enclave_attestation_url.clone(),
                     );
                 }
                 Keyword::Encrypt => {
-                    append_bool(&mut value, ENCRYPT, self.encrypt);
+                    append_bool(
+                        &mut value,
+                        DbConnectionStringKeywords::ENCRYPT,
+                        self.encrypt,
+                    );
                 }
                 Keyword::Enlist => {
-                    append_bool(&mut value, ENLIST, self.enlist);
+                    append_bool(&mut value, DbConnectionStringKeywords::ENLIST, self.enlist);
                 }
                 Keyword::FailoverPartner => {
-                    append_opt(&mut value, FAILOVER_PARTNER, self.failover_partner.clone());
+                    append_opt(
+                        &mut value,
+                        DbConnectionStringKeywords::FAILOVER_PARTNER,
+                        self.failover_partner.clone(),
+                    );
                 }
                 Keyword::InitialCatalog => {
-                    append_opt(&mut value, INITIAL_CATALOG, self.initial_catalog.clone());
+                    append_opt(
+                        &mut value,
+                        DbConnectionStringKeywords::INITIAL_CATALOG,
+                        self.initial_catalog.clone(),
+                    );
                 }
                 Keyword::IntegratedSecurity => {
-                    append_bool(&mut value, INTEGRATED_SECURITY, self.integrated_security);
+                    append_bool(
+                        &mut value,
+                        DbConnectionStringKeywords::INTEGRATED_SECURITY,
+                        self.integrated_security,
+                    );
                 }
                 Keyword::IpAddressPreference => {
                     append_str(
                         &mut value,
-                        IP_ADDRESS_PREFERENCE,
+                        DbConnectionStringKeywords::IP_ADDRESS_PREFERENCE,
                         self.ip_address_preference.to_string(),
                     );
                 }
                 Keyword::LoadBalanceTimeout => {
                     append_str(
                         &mut value,
-                        LOAD_BALANCE_TIMEOUT,
+                        DbConnectionStringKeywords::LOAD_BALANCE_TIMEOUT,
                         self.load_balance_timeout.to_string(),
                     );
                 }
                 Keyword::MaxPoolSize => {
-                    append_str(&mut value, MAX_POOL_SIZE, self.max_pool_size.to_string());
+                    append_str(
+                        &mut value,
+                        DbConnectionStringKeywords::MAX_POOL_SIZE,
+                        self.max_pool_size.to_string(),
+                    );
                 }
                 Keyword::MinPoolSize => {
-                    append_str(&mut value, MIN_POOL_SIZE, self.min_pool_size.to_string());
+                    append_str(
+                        &mut value,
+                        DbConnectionStringKeywords::MIN_POOL_SIZE,
+                        self.min_pool_size.to_string(),
+                    );
                 }
                 Keyword::MultipleActiveResultSets => {
                     append_bool(
                         &mut value,
-                        MULTIPLE_ACTIVE_RESULT_SETS,
+                        DbConnectionStringKeywords::MULTIPLE_ACTIVE_RESULT_SETS,
                         self.multiple_active_result_sets,
                     );
                 }
                 Keyword::MultiSubnetFailover => {
                     append_bool(
                         &mut value,
-                        MULTI_SUBNET_FAILOVER,
+                        DbConnectionStringKeywords::MULTI_SUBNET_FAILOVER,
                         self.multi_subnet_failover,
                     );
                 }
                 Keyword::PacketSize => {
-                    append_str(&mut value, PACKET_SIZE, self.packet_size.to_string());
+                    append_str(
+                        &mut value,
+                        DbConnectionStringKeywords::PACKET_SIZE,
+                        self.packet_size.to_string(),
+                    );
                 }
                 Keyword::Password => {
                     let pwd = self
                         .password
                         .clone()
                         .map(|pwd| String::from_utf8_lossy(pwd.unsecure()).to_string());
-                    append_opt(&mut value, PASSWORD, pwd);
+                    append_opt(&mut value, DbConnectionStringKeywords::PASSWORD, pwd);
                 }
                 Keyword::PersistSecurityInfo => {
                     append_bool(
                         &mut value,
-                        PERSIST_SECURITY_INFO,
+                        DbConnectionStringKeywords::PERSIST_SECURITY_INFO,
                         self.persist_security_info,
                     );
                 }
                 Keyword::Pooling => {
-                    append_bool(&mut value, POOLING, self.pooling);
+                    append_bool(
+                        &mut value,
+                        DbConnectionStringKeywords::POOLING,
+                        self.pooling,
+                    );
                 }
                 Keyword::PoolBlockingPeriod => {
                     append_str(
                         &mut value,
-                        POOL_BLOCKING_PERIOD,
+                        DbConnectionStringKeywords::POOL_BLOCKING_PERIOD,
                         self.pool_blocking_period.to_string(),
                     );
                 }
                 Keyword::Replication => {
-                    append_bool(&mut value, REPLICATION, self.replication);
+                    append_bool(
+                        &mut value,
+                        DbConnectionStringKeywords::REPLICATION,
+                        self.replication,
+                    );
                 }
                 Keyword::TransactionBinding => {
                     append_str(
                         &mut value,
-                        TRANSACTION_BINDING,
+                        DbConnectionStringKeywords::TRANSACTION_BINDING,
                         self.transaction_binding.to_string(),
                     );
                 }
                 Keyword::TypeSystemVersion => {
                     append_str(
                         &mut value,
-                        TYPE_SYSTEM_VERSION,
+                        DbConnectionStringKeywords::TYPE_SYSTEM_VERSION,
                         self.type_system_version.to_string(),
                     );
                 }
                 Keyword::UserId => {
-                    append_opt(&mut value, USER_ID, self.user_id.clone());
+                    append_opt(
+                        &mut value,
+                        DbConnectionStringKeywords::USER_ID,
+                        self.user_id.clone(),
+                    );
                 }
                 Keyword::WorkstationId => {
-                    append_opt(&mut value, WORKSTATION_ID, self.workstation_id.clone());
+                    append_opt(
+                        &mut value,
+                        DbConnectionStringKeywords::WORKSTATION_ID,
+                        self.workstation_id.clone(),
+                    );
                 }
                 Keyword::TrustServerCertificate => {
                     append_bool(
                         &mut value,
-                        TRUST_SERVER_CERTIFICATE,
+                        DbConnectionStringKeywords::TRUST_SERVER_CERTIFICATE,
                         self.trust_server_certificate,
                     );
                 }
                 Keyword::UserInstance => {
-                    append_bool(&mut value, USER_INSTANCE, self.user_instance);
+                    append_bool(
+                        &mut value,
+                        DbConnectionStringKeywords::USER_INSTANCE,
+                        self.user_instance,
+                    );
                 }
             }
         }
@@ -725,41 +790,45 @@ impl SqlConnectionStringBuilder {
 impl Default for SqlConnectionStringBuilder {
     fn default() -> Self {
         Self {
-            application_intent: DEFAULT_APPLICATION_INTENT,
-            application_name: DEFAULT_APPLICATION_NAME.to_string(),
-            attach_db_filename: DEFAULT_ATTACH_DB_FILENAME,
-            authentication: DEFAULT_AUTHENTICATION,
-            column_encryption_setting: DEFAULT_COLUMN_ENCRYPTION_SETTING,
-            command_timeout: DEFAULT_COMMAND_TIMEOUT,
-            connect_retry_count: DEFAULT_CONNECT_RETRY_COUNT,
-            connect_retry_interval: DEFAULT_CONNECT_RETRY_INTERVAL,
-            connect_timeout: DEFAULT_CONNECT_TIMEOUT,
-            current_language: DEFAULT_CURRENT_LANGUAGE,
-            data_source: DEFAULT_DATA_SOURCE,
-            enclave_attestation_url: DEFAULT_ENCLAVE_ATTESTATION_URL,
-            encrypt: DEFAULT_ENCRYPT,
-            enlist: DEFAULT_ENLIST,
-            failover_partner: DEFAULT_FAILOVER_PARTNER,
-            initial_catalog: DEFAULT_INITIAL_CATALOG,
-            integrated_security: DEFAULT_INTEGRATED_SECURITY,
-            ip_address_preference: DEFAULT_IP_ADDRESS_PREFERENCE,
-            load_balance_timeout: DEFAULT_LOAD_BALANCE_TIMEOUT,
-            max_pool_size: DEFAULT_MAX_POOL_SIZE,
-            min_pool_size: DEFAULT_MIN_POOL_SIZE,
-            multiple_active_result_sets: DEFAULT_MULTIPLE_ACTIVE_RESULT_SETS,
-            multi_subnet_failover: DEFAULT_MULTI_SUBNET_FAILOVER,
-            packet_size: DEFAULT_PACKET_SIZE,
-            password: DEFAULT_PASSWORD,
-            persist_security_info: DEFAULT_PERSIST_SECURITY_INFO,
-            pooling: DEFAULT_POOLING,
-            pool_blocking_period: DEFAULT_POOL_BLOCKING_PERIOD,
-            replication: DEFAULT_REPLICATION,
-            transaction_binding: DEFAULT_TRANSACTION_BINDING.to_string(),
-            type_system_version: DEFAULT_TYPE_SYSTEM_VERSION.to_string(),
-            user_id: DEFAULT_USER_ID,
-            workstation_id: DEFAULT_WORKSTATION_ID,
-            trust_server_certificate: DEFAULT_TRUST_SERVER_CERTIFICATE,
-            user_instance: DEFAULT_USER_INSTANCE,
+            application_intent: DbConnectionStringDefaults::DEFAULT_APPLICATION_INTENT,
+            application_name: DbConnectionStringDefaults::DEFAULT_APPLICATION_NAME.to_string(),
+            attach_db_filename: DbConnectionStringDefaults::DEFAULT_ATTACH_DB_FILENAME,
+            authentication: DbConnectionStringDefaults::DEFAULT_AUTHENTICATION,
+            column_encryption_setting:
+                DbConnectionStringDefaults::DEFAULT_COLUMN_ENCRYPTION_SETTING,
+            command_timeout: DbConnectionStringDefaults::DEFAULT_COMMAND_TIMEOUT,
+            connect_retry_count: DbConnectionStringDefaults::DEFAULT_CONNECT_RETRY_COUNT,
+            connect_retry_interval: DbConnectionStringDefaults::DEFAULT_CONNECT_RETRY_INTERVAL,
+            connect_timeout: DbConnectionStringDefaults::DEFAULT_CONNECT_TIMEOUT,
+            current_language: DbConnectionStringDefaults::DEFAULT_CURRENT_LANGUAGE,
+            data_source: DbConnectionStringDefaults::DEFAULT_DATA_SOURCE,
+            enclave_attestation_url: DbConnectionStringDefaults::DEFAULT_ENCLAVE_ATTESTATION_URL,
+            encrypt: DbConnectionStringDefaults::DEFAULT_ENCRYPT,
+            enlist: DbConnectionStringDefaults::DEFAULT_ENLIST,
+            failover_partner: DbConnectionStringDefaults::DEFAULT_FAILOVER_PARTNER,
+            initial_catalog: DbConnectionStringDefaults::DEFAULT_INITIAL_CATALOG,
+            integrated_security: DbConnectionStringDefaults::DEFAULT_INTEGRATED_SECURITY,
+            ip_address_preference: DbConnectionStringDefaults::DEFAULT_IP_ADDRESS_PREFERENCE,
+            load_balance_timeout: DbConnectionStringDefaults::DEFAULT_LOAD_BALANCE_TIMEOUT,
+            max_pool_size: DbConnectionStringDefaults::DEFAULT_MAX_POOL_SIZE,
+            min_pool_size: DbConnectionStringDefaults::DEFAULT_MIN_POOL_SIZE,
+            multiple_active_result_sets:
+                DbConnectionStringDefaults::DEFAULT_MULTIPLE_ACTIVE_RESULT_SETS,
+            multi_subnet_failover: DbConnectionStringDefaults::DEFAULT_MULTI_SUBNET_FAILOVER,
+            packet_size: DbConnectionStringDefaults::DEFAULT_PACKET_SIZE,
+            password: DbConnectionStringDefaults::DEFAULT_PASSWORD,
+            persist_security_info: DbConnectionStringDefaults::DEFAULT_PERSIST_SECURITY_INFO,
+            pooling: DbConnectionStringDefaults::DEFAULT_POOLING,
+            pool_blocking_period: DbConnectionStringDefaults::DEFAULT_POOL_BLOCKING_PERIOD,
+            replication: DbConnectionStringDefaults::DEFAULT_REPLICATION,
+            transaction_binding: DbConnectionStringDefaults::DEFAULT_TRANSACTION_BINDING
+                .to_string(),
+            type_system_version: DbConnectionStringDefaults::DEFAULT_TYPE_SYSTEM_VERSION
+                .to_string(),
+            user_id: DbConnectionStringDefaults::DEFAULT_USER_ID,
+            workstation_id: DbConnectionStringDefaults::DEFAULT_WORKSTATION_ID,
+            trust_server_certificate: DbConnectionStringDefaults::DEFAULT_TRUST_SERVER_CERTIFICATE,
+            user_instance: DbConnectionStringDefaults::DEFAULT_USER_INSTANCE,
             keywords_in_use: Vec::new(),
         }
     }
@@ -785,160 +854,179 @@ impl TryFrom<&str> for SqlConnectionStringBuilder {
                 let value = value.trim();
                 // Check the keyword against the keywords we know
                 match keyword {
-                    APPLICATION_INTENT_LOWER | APPLICATION_INTENT_ALT_LOWER => {
+                    DbConnectionStringKeywordsLower::APPLICATION_INTENT_LOWER
+                    | DbConnectionStringKeywordsLower::APPLICATION_INTENT_ALT_LOWER => {
                         let application_intent: ApplicationIntent = value.try_into()?;
                         connection_string_builder.set_application_intent(application_intent);
                     }
-                    APPLICATION_NAME_LOWER | APPLICATION_NAME_ALT_LOWER => {
+                    DbConnectionStringKeywordsLower::APPLICATION_NAME_LOWER
+                    | DbConnectionStringKeywordsLower::APPLICATION_NAME_ALT_LOWER => {
                         connection_string_builder.set_application_name(value.to_string());
                     }
-                    ATTACH_DB_FILENAME_LOWER | ATTACH_DB_FILENAME_ALT_LOWER => {
+                    DbConnectionStringKeywordsLower::ATTACH_DB_FILENAME_LOWER
+                    | DbConnectionStringKeywordsLower::ATTACH_DB_FILENAME_ALT_LOWER => {
                         connection_string_builder.set_attach_db_filename(Some(value.to_string()));
                     }
-                    AUTHENTICATION_LOWER => {
+                    DbConnectionStringKeywordsLower::AUTHENTICATION_LOWER => {
                         let authentication: SqlAuthenticationMethod = value.try_into()?;
                         connection_string_builder.set_authentication(authentication);
                     }
-                    COLUMN_ENCRYPTION_SETTING_LOWER => {
+                    DbConnectionStringKeywordsLower::COLUMN_ENCRYPTION_SETTING_LOWER => {
                         let column_encrpytion_setting: SqlConnectionColumnEncryptionSetting =
                             value.try_into()?;
                         connection_string_builder
                             .set_column_encryption_setting(column_encrpytion_setting);
                     }
-                    COMMAND_TIMEOUT_LOWER => {
+                    DbConnectionStringKeywordsLower::COMMAND_TIMEOUT_LOWER => {
                         let command_timeout: u16 = value.parse().map_err(|_| {
                             SqlClientError::UnsupportedValue("u16".to_string(), value.to_string())
                         })?;
                         connection_string_builder.set_command_timeout(command_timeout);
                     }
-                    CONNECT_RETRY_COUNT_LOWER | CONNECT_RETRY_COUNT_ALT_LOWER => {
+                    DbConnectionStringKeywordsLower::CONNECT_RETRY_COUNT_LOWER
+                    | DbConnectionStringKeywordsLower::CONNECT_RETRY_COUNT_ALT_LOWER => {
                         let connect_retry_count: u8 = value.parse().map_err(|_| {
                             SqlClientError::UnsupportedValue("u8".to_string(), value.to_string())
                         })?;
                         connection_string_builder.set_connect_retry_count(connect_retry_count);
                     }
-                    CONNECT_RETRY_INTERVAL_LOWER | CONNECT_RETRY_INTERVAL_ALT_LOWER => {
+                    DbConnectionStringKeywordsLower::CONNECT_RETRY_INTERVAL_LOWER
+                    | DbConnectionStringKeywordsLower::CONNECT_RETRY_INTERVAL_ALT_LOWER => {
                         let connect_retry_interval: u8 = value.parse().map_err(|_| {
                             SqlClientError::UnsupportedValue("u8".to_string(), value.to_string())
                         })?;
                         connection_string_builder
                             .set_connect_retry_interval(connect_retry_interval);
                     }
-                    CONNECT_TIMEOUT_LOWER
-                    | CONNECT_TIMEOUT_ALT1_LOWER
-                    | CONNECT_TIMEOUT_ALT2_LOWER => {
+                    DbConnectionStringKeywordsLower::CONNECT_TIMEOUT_LOWER
+                    | DbConnectionStringKeywordsLower::CONNECT_TIMEOUT_ALT1_LOWER
+                    | DbConnectionStringKeywordsLower::CONNECT_TIMEOUT_ALT2_LOWER => {
                         let connect_timeout: u16 = value.parse().map_err(|_| {
                             SqlClientError::UnsupportedValue("u16".to_string(), value.to_string())
                         })?;
                         connection_string_builder.set_connect_timeout(connect_timeout);
                     }
-                    CURRENT_LANGUAGE_LOWER | CURRENT_LANGUAGE_ALT_LOWER => {
+                    DbConnectionStringKeywordsLower::CURRENT_LANGUAGE_LOWER
+                    | DbConnectionStringKeywordsLower::CURRENT_LANGUAGE_ALT_LOWER => {
                         connection_string_builder.set_current_language(Some(value.to_string()));
                     }
-                    DATA_SOURCE_LOWER
-                    | DATA_SOURCE_ALT1_LOWER
-                    | DATA_SOURCE_ALT2_LOWER
-                    | DATA_SOURCE_ALT3_LOWER
-                    | DATA_SOURCE_ALT4_LOWER => {
+                    DbConnectionStringKeywordsLower::DATA_SOURCE_LOWER
+                    | DbConnectionStringKeywordsLower::DATA_SOURCE_ALT1_LOWER
+                    | DbConnectionStringKeywordsLower::DATA_SOURCE_ALT2_LOWER
+                    | DbConnectionStringKeywordsLower::DATA_SOURCE_ALT3_LOWER
+                    | DbConnectionStringKeywordsLower::DATA_SOURCE_ALT4_LOWER => {
                         connection_string_builder.set_data_source(Some(value.to_string()));
                     }
-                    ENCLAVE_ATTESTATION_URL_LOWER => {
+                    DbConnectionStringKeywordsLower::ENCLAVE_ATTESTATION_URL_LOWER => {
                         connection_string_builder
                             .set_enclave_attestation_url(Some(value.to_string()));
                     }
-                    ENCRYPT_LOWER => {
+                    DbConnectionStringKeywordsLower::ENCRYPT_LOWER => {
                         let encrypt = convert_to_boolean(value)?;
                         connection_string_builder.set_encrypt(encrypt);
                     }
-                    ENLIST_LOWER => {
+                    DbConnectionStringKeywordsLower::ENLIST_LOWER => {
                         let enlist = convert_to_boolean(value)?;
                         connection_string_builder.set_enlist(enlist);
                     }
-                    FAILOVER_PARTNER_LOWER => {
+                    DbConnectionStringKeywordsLower::FAILOVER_PARTNER_LOWER => {
                         connection_string_builder.set_failover_partner(Some(value.to_string()));
                     }
-                    INITIAL_CATALOG_LOWER | INITIAL_CATALOG_ALT_LOWER => {
+                    DbConnectionStringKeywordsLower::INITIAL_CATALOG_LOWER
+                    | DbConnectionStringKeywordsLower::INITIAL_CATALOG_ALT_LOWER => {
                         connection_string_builder.set_initial_catalog(Some(value.to_string()));
                     }
-                    INTEGRATED_SECURITY_LOWER | INTEGRATED_SECURITY_ALT_LOWER => {
+                    DbConnectionStringKeywordsLower::INTEGRATED_SECURITY_LOWER
+                    | DbConnectionStringKeywordsLower::INTEGRATED_SECURITY_ALT_LOWER => {
                         let integrated_security = convert_to_integrated_security(value)?;
                         connection_string_builder.set_integrated_security(integrated_security);
                     }
-                    IP_ADDRESS_PREFERENCE_LOWER | IP_ADDRESS_PREFERENCE_ALT_LOWER => {
+                    DbConnectionStringKeywordsLower::IP_ADDRESS_PREFERENCE_LOWER
+                    | DbConnectionStringKeywordsLower::IP_ADDRESS_PREFERENCE_ALT_LOWER => {
                         let ip_address_preference: SqlConnectionIpAddressPreference =
                             value.try_into()?;
                         connection_string_builder.set_ip_address_preference(ip_address_preference);
                     }
-                    LOAD_BALANCE_TIMEOUT_LOWER | LOAD_BALANCE_TIMEOUT_ALT_LOWER => {
+                    DbConnectionStringKeywordsLower::LOAD_BALANCE_TIMEOUT_LOWER
+                    | DbConnectionStringKeywordsLower::LOAD_BALANCE_TIMEOUT_ALT_LOWER => {
                         let load_balance_timeout: u16 = value.parse().map_err(|_| {
                             SqlClientError::UnsupportedValue("u16".to_string(), value.to_string())
                         })?;
                         connection_string_builder.set_load_balance_timeout(load_balance_timeout);
                     }
-                    MAX_POOL_SIZE_LOWER => {
+                    DbConnectionStringKeywordsLower::MAX_POOL_SIZE_LOWER => {
                         let max_pool_size: u8 = value.parse().map_err(|_| {
                             SqlClientError::UnsupportedValue("u16".to_string(), value.to_string())
                         })?;
                         connection_string_builder.set_max_pool_size(max_pool_size);
                     }
-                    MIN_POOL_SIZE_LOWER => {
+                    DbConnectionStringKeywordsLower::MIN_POOL_SIZE_LOWER => {
                         let min_pool_size: u8 = value.parse().map_err(|_| {
                             SqlClientError::UnsupportedValue("u16".to_string(), value.to_string())
                         })?;
                         connection_string_builder.set_min_pool_size(min_pool_size);
                     }
-                    MULTIPLE_ACTIVE_RESULT_SETS_LOWER | MULTIPLE_ACTIVE_RESULT_SETS_ALT_LOWER => {
+                    DbConnectionStringKeywordsLower::MULTIPLE_ACTIVE_RESULT_SETS_LOWER
+                    | DbConnectionStringKeywordsLower::MULTIPLE_ACTIVE_RESULT_SETS_ALT_LOWER => {
                         let multiple_active_result_sets = convert_to_boolean(value)?;
                         connection_string_builder
                             .set_multiple_active_result_sets(multiple_active_result_sets);
                     }
-                    MULTI_SUBNET_FAILOVER_LOWER | MULTI_SUBNET_FAILOVER_ALT_LOWER => {
+                    DbConnectionStringKeywordsLower::MULTI_SUBNET_FAILOVER_LOWER
+                    | DbConnectionStringKeywordsLower::MULTI_SUBNET_FAILOVER_ALT_LOWER => {
                         let multi_subnet_failover = convert_to_boolean(value)?;
                         connection_string_builder.set_multi_subnet_failover(multi_subnet_failover);
                     }
-                    PACKET_SIZE_LOWER => {
+                    DbConnectionStringKeywordsLower::PACKET_SIZE_LOWER => {
                         let packet_size: u16 = value.parse().map_err(|_| {
                             SqlClientError::UnsupportedValue("u16".to_string(), value.to_string())
                         })?;
                         connection_string_builder.set_packet_size(packet_size);
                     }
-                    PASSWORD_LOWER | PASSWORD_ALT_LOWER => {
+                    DbConnectionStringKeywordsLower::PASSWORD_LOWER
+                    | DbConnectionStringKeywordsLower::PASSWORD_ALT_LOWER => {
                         connection_string_builder.set_password(Some(SecStr::from(value)));
                     }
-                    PERSIST_SECURITY_INFO_LOWER | PERSIST_SECURITY_INFO_ALT_LOWER => {
+                    DbConnectionStringKeywordsLower::PERSIST_SECURITY_INFO_LOWER
+                    | DbConnectionStringKeywordsLower::PERSIST_SECURITY_INFO_ALT_LOWER => {
                         let persist_security_info = convert_to_boolean(value)?;
                         connection_string_builder.set_persist_security_info(persist_security_info);
                     }
-                    POOLING_LOWER => {
+                    DbConnectionStringKeywordsLower::POOLING_LOWER => {
                         let pooling = convert_to_boolean(value)?;
                         connection_string_builder.set_pooling(pooling);
                     }
-                    POOL_BLOCKING_PERIOD_LOWER | POOL_BLOCKING_PERIOD_ALT_LOWER => {
+                    DbConnectionStringKeywordsLower::POOL_BLOCKING_PERIOD_LOWER
+                    | DbConnectionStringKeywordsLower::POOL_BLOCKING_PERIOD_ALT_LOWER => {
                         let pool_blocking_period: PoolBlockingPeriod = value.try_into()?;
                         connection_string_builder.set_pool_blocking_period(pool_blocking_period);
                     }
-                    REPLICATION_LOWER => {
+                    DbConnectionStringKeywordsLower::REPLICATION_LOWER => {
                         let replication = convert_to_boolean(value)?;
                         connection_string_builder.set_replication(replication);
                     }
-                    TRANSACTION_BINDING_LOWER => {
+                    DbConnectionStringKeywordsLower::TRANSACTION_BINDING_LOWER => {
                         connection_string_builder.set_transaction_binding(value.to_string());
                     }
-                    TRUST_SERVER_CERTIFICATE_LOWER | TRUST_SERVER_CERTIFICATE_ALT_LOWER => {
+                    DbConnectionStringKeywordsLower::TRUST_SERVER_CERTIFICATE_LOWER
+                    | DbConnectionStringKeywordsLower::TRUST_SERVER_CERTIFICATE_ALT_LOWER => {
                         let trust_server_certificate = convert_to_boolean(value)?;
                         connection_string_builder
                             .set_trust_server_certificate(trust_server_certificate);
                     }
-                    TYPE_SYSTEM_VERSION_LOWER => {
+                    DbConnectionStringKeywordsLower::TYPE_SYSTEM_VERSION_LOWER => {
                         connection_string_builder.set_type_system_version(value.to_string());
                     }
-                    USER_ID_LOWER | USER_ID_ALT1_LOWER | USER_ID_ALT2_LOWER => {
+                    DbConnectionStringKeywordsLower::USER_ID_LOWER
+                    | DbConnectionStringKeywordsLower::USER_ID_ALT1_LOWER
+                    | DbConnectionStringKeywordsLower::USER_ID_ALT2_LOWER => {
                         connection_string_builder.set_user_id(Some(value.to_string()));
                     }
-                    WORKSTATION_ID_LOWER | WORKSTATION_ALT_ID_LOWER => {
+                    DbConnectionStringKeywordsLower::WORKSTATION_ID_LOWER
+                    | DbConnectionStringKeywordsLower::WORKSTATION_ALT_ID_LOWER => {
                         connection_string_builder.set_workstation_id(Some(value.to_string()));
                     }
-                    USER_INSTANCE_LOWER => {
+                    DbConnectionStringKeywordsLower::USER_INSTANCE_LOWER => {
                         let user_instance = convert_to_boolean(value)?;
                         connection_string_builder.set_user_instance(user_instance);
                     }
