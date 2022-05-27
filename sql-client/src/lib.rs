@@ -6,6 +6,8 @@ pub mod application_intent;
 pub(crate) mod connection_state;
 pub(crate) mod db_connection_internal;
 pub(crate) mod db_connection_pool;
+pub(crate) mod db_connection_string_defaults;
+pub(crate) mod db_connection_string_keywords;
 pub mod pool_blocking_period;
 pub mod sql_authentication_method;
 pub mod sql_client_error;

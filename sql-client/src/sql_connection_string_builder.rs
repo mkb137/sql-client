@@ -1,6 +1,8 @@
 //! Creates a SQL connection string.
 //!
 //!
+use super::db_connection_string_defaults::*;
+use super::db_connection_string_keywords::*;
 use crate::{
     ApplicationIntent, PoolBlockingPeriod, SqlAuthenticationMethod, SqlClientError,
     SqlConnectionColumnEncryptionSetting, SqlConnectionIpAddressPreference,
@@ -49,43 +51,6 @@ enum Keyword {
 }
 
 // Defaults
-const DEFAULT_APPLICATION_INTENT: ApplicationIntent = ApplicationIntent::ReadWrite;
-const DEFAULT_APPLICATION_NAME: &str = "SqlClient Data Provider";
-const DEFAULT_ATTACH_DB_FILENAME: Option<String> = None;
-const DEFAULT_AUTHENTICATION: SqlAuthenticationMethod = SqlAuthenticationMethod::NotSpecified;
-const DEFAULT_COLUMN_ENCRYPTION_SETTING: SqlConnectionColumnEncryptionSetting =
-    SqlConnectionColumnEncryptionSetting::Disabled;
-const DEFAULT_CONNECT_RETRY_COUNT: u8 = 1;
-const DEFAULT_CONNECT_RETRY_INTERVAL: u8 = 10;
-const DEFAULT_CONNECT_TIMEOUT: u16 = 15;
-const DEFAULT_COMMAND_TIMEOUT: u16 = 30;
-const DEFAULT_CURRENT_LANGUAGE: Option<String> = None;
-const DEFAULT_DATA_SOURCE: Option<String> = None;
-const DEFAULT_ENCLAVE_ATTESTATION_URL: Option<String> = None;
-const DEFAULT_ENCRYPT: bool = true;
-const DEFAULT_ENLIST: bool = true;
-const DEFAULT_FAILOVER_PARTNER: Option<String> = None;
-const DEFAULT_INITIAL_CATALOG: Option<String> = None;
-const DEFAULT_INTEGRATED_SECURITY: bool = false;
-const DEFAULT_IP_ADDRESS_PREFERENCE: SqlConnectionIpAddressPreference =
-    SqlConnectionIpAddressPreference::IPv4First;
-const DEFAULT_LOAD_BALANCE_TIMEOUT: u16 = 0;
-const DEFAULT_MAX_POOL_SIZE: u8 = 100;
-const DEFAULT_MIN_POOL_SIZE: u8 = 0;
-const DEFAULT_MULTIPLE_ACTIVE_RESULT_SETS: bool = false;
-const DEFAULT_MULTI_SUBNET_FAILOVER: bool = false;
-const DEFAULT_PACKET_SIZE: u16 = 8000;
-const DEFAULT_PASSWORD: Option<SecStr> = None;
-const DEFAULT_PERSIST_SECURITY_INFO: bool = false;
-const DEFAULT_POOLING: bool = true;
-const DEFAULT_POOL_BLOCKING_PERIOD: PoolBlockingPeriod = PoolBlockingPeriod::Auto;
-const DEFAULT_REPLICATION: bool = false;
-const DEFAULT_TRANSACTION_BINDING: &str = "Implicit Unbind";
-const DEFAULT_TYPE_SYSTEM_VERSION: &str = "Latest";
-const DEFAULT_USER_ID: Option<String> = None;
-const DEFAULT_WORKSTATION_ID: Option<String> = None;
-const DEFAULT_TRUST_SERVER_CERTIFICATE: bool = false;
-const DEFAULT_USER_INSTANCE: bool = false;
 
 /// Appends a keyword/value pair to a connection string.
 fn append(connection_string: &mut String, keyword: &str, value: &str) {
@@ -408,187 +373,171 @@ impl SqlConnectionStringBuilder {
                 Keyword::ApplicationIntent => {
                     append_str(
                         &mut value,
-                        "Application Intent",
+                        APPLICATION_INTENT,
                         self.application_intent.to_string(),
                     );
                 }
                 Keyword::ApplicationName => {
-                    append_str(
-                        &mut value,
-                        "Application Name",
-                        self.application_name.clone(),
-                    );
+                    append_str(&mut value, APPLICATION_NAME, self.application_name.clone());
                 }
                 Keyword::AttachDbFilename => {
                     append_opt(
                         &mut value,
-                        "AttachDbFilename",
+                        ATTACH_DB_FILENAME,
                         self.attach_db_filename.clone(),
                     );
                 }
                 Keyword::Authentication => {
-                    append_str(
-                        &mut value,
-                        "Authentication",
-                        self.authentication.to_string(),
-                    );
+                    append_str(&mut value, AUTHENTICATION, self.authentication.to_string());
                 }
                 Keyword::ColumnEncryptionSetting => append_str(
                     &mut value,
-                    "Column Encryption Setting",
+                    COLUMN_ENCRYPTION_SETTING,
                     self.column_encryption_setting.to_string(),
                 ),
                 Keyword::ConnectRetryCount => {
                     append_str(
                         &mut value,
-                        "Connect Retry Count",
+                        CONNECT_RETRY_COUNT,
                         self.connect_retry_count.to_string(),
                     );
                 }
                 Keyword::ConnectRetryInterval => append_str(
                     &mut value,
-                    "Connect Retry Interval",
+                    CONNECT_RETRY_INTERVAL,
                     self.connect_retry_interval.to_string(),
                 ),
                 Keyword::ConnectTimeout => append_str(
                     &mut value,
-                    "Connect Timeout",
+                    CONNECT_TIMEOUT,
                     self.connect_timeout.to_string(),
                 ),
                 Keyword::CommandTimeout => append_str(
                     &mut value,
-                    "Command Timeout",
+                    COMMAND_TIMEOUT,
                     self.command_timeout.to_string(),
                 ),
                 Keyword::CurrentLanguage => {
-                    append_opt(
-                        &mut value,
-                        "Current Language",
-                        self.current_language.clone(),
-                    );
+                    append_opt(&mut value, CURRENT_LANGUAGE, self.current_language.clone());
                 }
                 Keyword::DataSource => {
-                    append_opt(&mut value, "Data Source", self.data_source.clone());
+                    append_opt(&mut value, DATA_SOURCE, self.data_source.clone());
                 }
                 Keyword::EnclaveAttestationUrl => {
                     append_opt(
                         &mut value,
-                        "Enclave Attestation Url",
+                        ENCLAVE_ATTESTATION_URL,
                         self.enclave_attestation_url.clone(),
                     );
                 }
                 Keyword::Encrypt => {
-                    append_bool(&mut value, "Encrypt", self.encrypt);
+                    append_bool(&mut value, ENCRYPT, self.encrypt);
                 }
                 Keyword::Enlist => {
-                    append_bool(&mut value, "Enlist", self.enlist);
+                    append_bool(&mut value, ENLIST, self.enlist);
                 }
                 Keyword::FailoverPartner => {
-                    append_opt(
-                        &mut value,
-                        "Failover Partner",
-                        self.failover_partner.clone(),
-                    );
+                    append_opt(&mut value, FAILOVER_PARTNER, self.failover_partner.clone());
                 }
                 Keyword::InitialCatalog => {
-                    append_opt(&mut value, "Initial Catalog", self.initial_catalog.clone());
+                    append_opt(&mut value, INITIAL_CATALOG, self.initial_catalog.clone());
                 }
                 Keyword::IntegratedSecurity => {
-                    append_bool(&mut value, "Integrated Security", self.integrated_security);
+                    append_bool(&mut value, INTEGRATED_SECURITY, self.integrated_security);
                 }
                 Keyword::IpAddressPreference => {
                     append_str(
                         &mut value,
-                        "IP Address Preference",
+                        IP_ADDRESS_PREFERENCE,
                         self.ip_address_preference.to_string(),
                     );
                 }
                 Keyword::LoadBalanceTimeout => {
                     append_str(
                         &mut value,
-                        "Load Balance Timeout",
+                        LOAD_BALANCE_TIMEOUT,
                         self.load_balance_timeout.to_string(),
                     );
                 }
                 Keyword::MaxPoolSize => {
-                    append_str(&mut value, "Max Pool Size", self.max_pool_size.to_string());
+                    append_str(&mut value, MAX_POOL_SIZE, self.max_pool_size.to_string());
                 }
                 Keyword::MinPoolSize => {
-                    append_str(&mut value, "Min Pool Size", self.min_pool_size.to_string());
+                    append_str(&mut value, MIN_POOL_SIZE, self.min_pool_size.to_string());
                 }
                 Keyword::MultipleActiveResultSets => {
                     append_bool(
                         &mut value,
-                        "Multiple Active Result Sets",
+                        MULTIPLE_ACTIVE_RESULT_SETS,
                         self.multiple_active_result_sets,
                     );
                 }
                 Keyword::MultiSubnetFailover => {
                     append_bool(
                         &mut value,
-                        "Multi Subnet Failover",
+                        MULTI_SUBNET_FAILOVER,
                         self.multi_subnet_failover,
                     );
                 }
                 Keyword::PacketSize => {
-                    append_str(&mut value, "Packet Size", self.packet_size.to_string());
+                    append_str(&mut value, PACKET_SIZE, self.packet_size.to_string());
                 }
                 Keyword::Password => {
                     let pwd = self
                         .password
                         .clone()
                         .map(|pwd| String::from_utf8_lossy(pwd.unsecure()).to_string());
-                    append_opt(&mut value, "Password", pwd);
+                    append_opt(&mut value, PASSWORD, pwd);
                 }
                 Keyword::PersistSecurityInfo => {
                     append_bool(
                         &mut value,
-                        "Persist Security Info",
+                        PERSIST_SECURITY_INFO,
                         self.persist_security_info,
                     );
                 }
                 Keyword::Pooling => {
-                    append_bool(&mut value, "Pooling", self.pooling);
+                    append_bool(&mut value, POOLING, self.pooling);
                 }
                 Keyword::PoolBlockingPeriod => {
                     append_str(
                         &mut value,
-                        "Pool Blocking Period",
+                        POOL_BLOCKING_PERIOD,
                         self.pool_blocking_period.to_string(),
                     );
                 }
                 Keyword::Replication => {
-                    append_bool(&mut value, "Replication", self.replication);
+                    append_bool(&mut value, REPLICATION, self.replication);
                 }
                 Keyword::TransactionBinding => {
                     append_str(
                         &mut value,
-                        "Transaction Binding",
+                        TRANSACTION_BINDING,
                         self.transaction_binding.to_string(),
                     );
                 }
                 Keyword::TypeSystemVersion => {
                     append_str(
                         &mut value,
-                        "Type System Version",
+                        TYPE_SYSTEM_VERSION,
                         self.type_system_version.to_string(),
                     );
                 }
                 Keyword::UserId => {
-                    append_opt(&mut value, "User ID", self.user_id.clone());
+                    append_opt(&mut value, USER_ID, self.user_id.clone());
                 }
                 Keyword::WorkstationId => {
-                    append_opt(&mut value, "Workstation ID", self.workstation_id.clone());
+                    append_opt(&mut value, WORKSTATION_ID, self.workstation_id.clone());
                 }
                 Keyword::TrustServerCertificate => {
                     append_bool(
                         &mut value,
-                        "Trust Server Certificate",
+                        TRUST_SERVER_CERTIFICATE,
                         self.trust_server_certificate,
                     );
                 }
                 Keyword::UserInstance => {
-                    append_bool(&mut value, "User Instance", self.user_instance);
+                    append_bool(&mut value, USER_INSTANCE, self.user_instance);
                 }
             }
         }
@@ -836,154 +785,160 @@ impl TryFrom<&str> for SqlConnectionStringBuilder {
                 let value = value.trim();
                 // Check the keyword against the keywords we know
                 match keyword {
-                    "application intent" | "applicationintent" => {
+                    APPLICATION_INTENT_LOWER | APPLICATION_INTENT_ALT_LOWER => {
                         let application_intent: ApplicationIntent = value.try_into()?;
                         connection_string_builder.set_application_intent(application_intent);
                     }
-                    "application name" | "app" => {
+                    APPLICATION_NAME_LOWER | APPLICATION_NAME_ALT_LOWER => {
                         connection_string_builder.set_application_name(value.to_string());
                     }
-                    "attachdbfilename" | "initial file name" => {
+                    ATTACH_DB_FILENAME_LOWER | ATTACH_DB_FILENAME_ALT_LOWER => {
                         connection_string_builder.set_attach_db_filename(Some(value.to_string()));
                     }
-                    "authentication" => {
+                    AUTHENTICATION_LOWER => {
                         let authentication: SqlAuthenticationMethod = value.try_into()?;
                         connection_string_builder.set_authentication(authentication);
                     }
-                    "column encryption setting" => {
+                    COLUMN_ENCRYPTION_SETTING_LOWER => {
                         let column_encrpytion_setting: SqlConnectionColumnEncryptionSetting =
                             value.try_into()?;
                         connection_string_builder
                             .set_column_encryption_setting(column_encrpytion_setting);
                     }
-                    "command timeout" => {
+                    COMMAND_TIMEOUT_LOWER => {
                         let command_timeout: u16 = value.parse().map_err(|_| {
                             SqlClientError::UnsupportedValue("u16".to_string(), value.to_string())
                         })?;
                         connection_string_builder.set_command_timeout(command_timeout);
                     }
-                    "connect retry count" | "connectretrycount" => {
+                    CONNECT_RETRY_COUNT_LOWER | CONNECT_RETRY_COUNT_ALT_LOWER => {
                         let connect_retry_count: u8 = value.parse().map_err(|_| {
                             SqlClientError::UnsupportedValue("u8".to_string(), value.to_string())
                         })?;
                         connection_string_builder.set_connect_retry_count(connect_retry_count);
                     }
-                    "connect retry interval" | "connectretryinterval" => {
+                    CONNECT_RETRY_INTERVAL_LOWER | CONNECT_RETRY_INTERVAL_ALT_LOWER => {
                         let connect_retry_interval: u8 = value.parse().map_err(|_| {
                             SqlClientError::UnsupportedValue("u8".to_string(), value.to_string())
                         })?;
                         connection_string_builder
                             .set_connect_retry_interval(connect_retry_interval);
                     }
-                    "connect timeout" | "connection timeout" | "timeout" => {
+                    CONNECT_TIMEOUT_LOWER
+                    | CONNECT_TIMEOUT_ALT1_LOWER
+                    | CONNECT_TIMEOUT_ALT2_LOWER => {
                         let connect_timeout: u16 = value.parse().map_err(|_| {
                             SqlClientError::UnsupportedValue("u16".to_string(), value.to_string())
                         })?;
                         connection_string_builder.set_connect_timeout(connect_timeout);
                     }
-                    "current language" | "language" => {
+                    CURRENT_LANGUAGE_LOWER | CURRENT_LANGUAGE_ALT_LOWER => {
                         connection_string_builder.set_current_language(Some(value.to_string()));
                     }
-                    "data source" | "addr" | "address" | "network address" | "server" => {
+                    DATA_SOURCE_LOWER
+                    | DATA_SOURCE_ALT1_LOWER
+                    | DATA_SOURCE_ALT2_LOWER
+                    | DATA_SOURCE_ALT3_LOWER
+                    | DATA_SOURCE_ALT4_LOWER => {
                         connection_string_builder.set_data_source(Some(value.to_string()));
                     }
-                    "enclave attestation url" => {
+                    ENCLAVE_ATTESTATION_URL_LOWER => {
                         connection_string_builder
                             .set_enclave_attestation_url(Some(value.to_string()));
                     }
-                    "encrypt" => {
+                    ENCRYPT_LOWER => {
                         let encrypt = convert_to_boolean(value)?;
                         connection_string_builder.set_encrypt(encrypt);
                     }
-                    "enlist" => {
+                    ENLIST_LOWER => {
                         let enlist = convert_to_boolean(value)?;
                         connection_string_builder.set_enlist(enlist);
                     }
-                    "failover partner" => {
+                    FAILOVER_PARTNER_LOWER => {
                         connection_string_builder.set_failover_partner(Some(value.to_string()));
                     }
-                    "initial catalog" | "database" => {
+                    INITIAL_CATALOG_LOWER | INITIAL_CATALOG_ALT_LOWER => {
                         connection_string_builder.set_initial_catalog(Some(value.to_string()));
                     }
-                    "integrated security" | "trusted_connection" => {
+                    INTEGRATED_SECURITY_LOWER | INTEGRATED_SECURITY_ALT_LOWER => {
                         let integrated_security = convert_to_integrated_security(value)?;
                         connection_string_builder.set_integrated_security(integrated_security);
                     }
-                    "ip address preference" | "ipaddresspreference" => {
+                    IP_ADDRESS_PREFERENCE_LOWER | IP_ADDRESS_PREFERENCE_ALT_LOWER => {
                         let ip_address_preference: SqlConnectionIpAddressPreference =
                             value.try_into()?;
                         connection_string_builder.set_ip_address_preference(ip_address_preference);
                     }
-                    "load balance timeout" | "connection lifetime" => {
+                    LOAD_BALANCE_TIMEOUT_LOWER | LOAD_BALANCE_TIMEOUT_ALT_LOWER => {
                         let load_balance_timeout: u16 = value.parse().map_err(|_| {
                             SqlClientError::UnsupportedValue("u16".to_string(), value.to_string())
                         })?;
                         connection_string_builder.set_load_balance_timeout(load_balance_timeout);
                     }
-                    "max pool size" => {
+                    MAX_POOL_SIZE_LOWER => {
                         let max_pool_size: u8 = value.parse().map_err(|_| {
                             SqlClientError::UnsupportedValue("u16".to_string(), value.to_string())
                         })?;
                         connection_string_builder.set_max_pool_size(max_pool_size);
                     }
-                    "min pool size" => {
+                    MIN_POOL_SIZE_LOWER => {
                         let min_pool_size: u8 = value.parse().map_err(|_| {
                             SqlClientError::UnsupportedValue("u16".to_string(), value.to_string())
                         })?;
                         connection_string_builder.set_min_pool_size(min_pool_size);
                     }
-                    "multiple active result sets" | "multipleactiveresultsets" => {
+                    MULTIPLE_ACTIVE_RESULT_SETS_LOWER | MULTIPLE_ACTIVE_RESULT_SETS_ALT_LOWER => {
                         let multiple_active_result_sets = convert_to_boolean(value)?;
                         connection_string_builder
                             .set_multiple_active_result_sets(multiple_active_result_sets);
                     }
-                    "multi subnet failover" | "multisubnetfailover" => {
+                    MULTI_SUBNET_FAILOVER_LOWER | MULTI_SUBNET_FAILOVER_ALT_LOWER => {
                         let multi_subnet_failover = convert_to_boolean(value)?;
                         connection_string_builder.set_multi_subnet_failover(multi_subnet_failover);
                     }
-                    "packet size" => {
+                    PACKET_SIZE_LOWER => {
                         let packet_size: u16 = value.parse().map_err(|_| {
                             SqlClientError::UnsupportedValue("u16".to_string(), value.to_string())
                         })?;
                         connection_string_builder.set_packet_size(packet_size);
                     }
-                    "password" | "pwd" => {
+                    PASSWORD_LOWER | PASSWORD_ALT_LOWER => {
                         connection_string_builder.set_password(Some(SecStr::from(value)));
                     }
-                    "persist security info" | "persistsecurityinfo" => {
+                    PERSIST_SECURITY_INFO_LOWER | PERSIST_SECURITY_INFO_ALT_LOWER => {
                         let persist_security_info = convert_to_boolean(value)?;
                         connection_string_builder.set_persist_security_info(persist_security_info);
                     }
-                    "pooling" => {
+                    POOLING_LOWER => {
                         let pooling = convert_to_boolean(value)?;
                         connection_string_builder.set_pooling(pooling);
                     }
-                    "pool blocking period" | "poolblockingperiod" => {
+                    POOL_BLOCKING_PERIOD_LOWER | POOL_BLOCKING_PERIOD_ALT_LOWER => {
                         let pool_blocking_period: PoolBlockingPeriod = value.try_into()?;
                         connection_string_builder.set_pool_blocking_period(pool_blocking_period);
                     }
-                    "replication" => {
+                    REPLICATION_LOWER => {
                         let replication = convert_to_boolean(value)?;
                         connection_string_builder.set_replication(replication);
                     }
-                    "transaction binding" => {
+                    TRANSACTION_BINDING_LOWER => {
                         connection_string_builder.set_transaction_binding(value.to_string());
                     }
-                    "trust server certificate" | "trustservercertificate" => {
+                    TRUST_SERVER_CERTIFICATE_LOWER | TRUST_SERVER_CERTIFICATE_ALT_LOWER => {
                         let trust_server_certificate = convert_to_boolean(value)?;
                         connection_string_builder
                             .set_trust_server_certificate(trust_server_certificate);
                     }
-                    "type system version" => {
+                    TYPE_SYSTEM_VERSION_LOWER => {
                         connection_string_builder.set_type_system_version(value.to_string());
                     }
-                    "user id" | "uid" | "user" => {
+                    USER_ID_LOWER | USER_ID_ALT1_LOWER | USER_ID_ALT2_LOWER => {
                         connection_string_builder.set_user_id(Some(value.to_string()));
                     }
-                    "workstation id" | "wsid" => {
+                    WORKSTATION_ID_LOWER | WORKSTATION_ALT_ID_LOWER => {
                         connection_string_builder.set_workstation_id(Some(value.to_string()));
                     }
-                    "user instance" => {
+                    USER_INSTANCE_LOWER => {
                         let user_instance = convert_to_boolean(value)?;
                         connection_string_builder.set_user_instance(user_instance);
                     }
