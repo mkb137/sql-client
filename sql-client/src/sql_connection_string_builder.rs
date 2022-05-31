@@ -76,11 +76,11 @@ fn append_str(connection_string: &mut String, keyword: &str, value: String) {
 }
 
 /// Appends a keyword/value pair to a connection string, formatting the bool correctly.
-fn append_bool(connection_string: &mut String, keyword: &str, value: bool) {
+fn append_bool(connection_string: &mut String, keyword: &str, value: &bool) {
     append(
         connection_string,
         keyword,
-        if value { "True" } else { "False" },
+        if *value { "True" } else { "False" },
     );
 }
 
@@ -429,11 +429,11 @@ impl SqlConnectionStringBuilder {
                     append_bool(
                         &mut value,
                         DbConnectionStringKeywords::ENCRYPT,
-                        self.encrypt,
+                        &self.encrypt,
                     );
                 }
                 Keyword::Enlist => {
-                    append_bool(&mut value, DbConnectionStringKeywords::ENLIST, self.enlist);
+                    append_bool(&mut value, DbConnectionStringKeywords::ENLIST, &self.enlist);
                 }
                 Keyword::FailoverPartner => {
                     append_opt(
@@ -453,7 +453,7 @@ impl SqlConnectionStringBuilder {
                     append_bool(
                         &mut value,
                         DbConnectionStringKeywords::INTEGRATED_SECURITY,
-                        self.integrated_security,
+                        &self.integrated_security,
                     );
                 }
                 Keyword::IpAddressPreference => {
@@ -488,14 +488,14 @@ impl SqlConnectionStringBuilder {
                     append_bool(
                         &mut value,
                         DbConnectionStringKeywords::MULTIPLE_ACTIVE_RESULT_SETS,
-                        self.multiple_active_result_sets,
+                        &self.multiple_active_result_sets,
                     );
                 }
                 Keyword::MultiSubnetFailover => {
                     append_bool(
                         &mut value,
                         DbConnectionStringKeywords::MULTI_SUBNET_FAILOVER,
-                        self.multi_subnet_failover,
+                        &self.multi_subnet_failover,
                     );
                 }
                 Keyword::PacketSize => {
@@ -516,14 +516,14 @@ impl SqlConnectionStringBuilder {
                     append_bool(
                         &mut value,
                         DbConnectionStringKeywords::PERSIST_SECURITY_INFO,
-                        self.persist_security_info,
+                        &self.persist_security_info,
                     );
                 }
                 Keyword::Pooling => {
                     append_bool(
                         &mut value,
                         DbConnectionStringKeywords::POOLING,
-                        self.pooling,
+                        &self.pooling,
                     );
                 }
                 Keyword::PoolBlockingPeriod => {
@@ -537,7 +537,7 @@ impl SqlConnectionStringBuilder {
                     append_bool(
                         &mut value,
                         DbConnectionStringKeywords::REPLICATION,
-                        self.replication,
+                        &self.replication,
                     );
                 }
                 Keyword::TransactionBinding => {
@@ -572,14 +572,14 @@ impl SqlConnectionStringBuilder {
                     append_bool(
                         &mut value,
                         DbConnectionStringKeywords::TRUST_SERVER_CERTIFICATE,
-                        self.trust_server_certificate,
+                        &self.trust_server_certificate,
                     );
                 }
                 Keyword::UserInstance => {
                     append_bool(
                         &mut value,
                         DbConnectionStringKeywords::USER_INSTANCE,
-                        self.user_instance,
+                        &self.user_instance,
                     );
                 }
             }

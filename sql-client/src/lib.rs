@@ -15,6 +15,7 @@ pub mod sql_client_error;
 pub mod sql_column_encryption_setting;
 pub mod sql_connection;
 pub mod sql_connection_ip_address_preference;
+mod sql_connection_string;
 pub mod sql_connection_string_builder;
 pub mod sql_credential;
 pub(crate) mod tds_enums;
@@ -24,10 +25,17 @@ mod transaction_binding;
 mod type_system;
 
 // Re-exports
+#[doc(inline)]
 pub use application_intent::ApplicationIntent;
+#[doc(inline)]
 pub use pool_blocking_period::PoolBlockingPeriod;
+#[doc(inline)]
 pub use sql_authentication_method::SqlAuthenticationMethod;
+#[doc(inline)]
 pub use sql_client_error::SqlClientError;
+#[doc(inline)]
 pub use sql_column_encryption_setting::SqlConnectionColumnEncryptionSetting;
+#[doc(inline)]
 pub use sql_connection_ip_address_preference::SqlConnectionIpAddressPreference;
+#[doc(inline)]
 pub use sql_connection_string_builder::SqlConnectionStringBuilder;
