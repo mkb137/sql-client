@@ -1,6 +1,7 @@
 use crate::{
     ApplicationIntent, PoolBlockingPeriod, SqlAuthenticationMethod,
-    SqlConnectionColumnEncryptionSetting, SqlConnectionIpAddressPreference,
+    SqlConnectionAttestationProtocol, SqlConnectionColumnEncryptionSetting,
+    SqlConnectionIpAddressPreference, TransactionBinding, TypeSystem, TypeSystemVersion,
 };
 use secstr::SecStr;
 pub(crate) struct DbConnectionStringDefaults;
@@ -8,6 +9,8 @@ impl DbConnectionStringDefaults {
     pub const APPLICATION_INTENT: ApplicationIntent = ApplicationIntent::ReadWrite;
     pub const APPLICATION_NAME: &'static str = "SqlClient Data Provider";
     pub const ATTACH_DB_FILENAME: Option<String> = None;
+    pub const ATTESTATION_PROTOCOL: SqlConnectionAttestationProtocol =
+        SqlConnectionAttestationProtocol::NotSpecified;
     pub const AUTHENTICATION: SqlAuthenticationMethod = SqlAuthenticationMethod::NotSpecified;
     pub const COLUMN_ENCRYPTION_SETTING: SqlConnectionColumnEncryptionSetting =
         SqlConnectionColumnEncryptionSetting::Disabled;
@@ -26,6 +29,7 @@ impl DbConnectionStringDefaults {
     pub const IP_ADDRESS_PREFERENCE: SqlConnectionIpAddressPreference =
         SqlConnectionIpAddressPreference::IPv4First;
     pub const LOAD_BALANCE_TIMEOUT: u16 = 0;
+    pub const LOCAL_DB_INSTANCE: Option<String> = None;
     pub const MAX_POOL_SIZE: u8 = 100;
     pub const MIN_POOL_SIZE: u8 = 0;
     pub const MULTIPLE_ACTIVE_RESULT_SETS: bool = false;
@@ -36,9 +40,11 @@ impl DbConnectionStringDefaults {
     pub const POOLING: bool = true;
     pub const POOL_BLOCKING_PERIOD: PoolBlockingPeriod = PoolBlockingPeriod::Auto;
     pub const REPLICATION: bool = false;
-    pub const TRANSACTION_BINDING: &'static str = "Implicit Unbind";
+    pub const TRANSACTION_BINDING_STR: &'static str = "Implicit Unbind";
+    pub const TRANSACTION_BINDING: TransactionBinding = TransactionBinding::ImplicitUnbind;
     pub const TRUST_SERVER_CERTIFICATE: bool = false;
-    pub const TYPE_SYSTEM_VERSION: &'static str = "Latest";
+    pub const TYPE_SYSTEM_VERSION: &'static str = "LATEST";
+    pub const TYPE_SYSTEM_ASSEMBLY_VERSION: TypeSystem = TypeSystem::LATEST;
     pub const USER_ID: Option<String> = None;
     pub const USER_INSTANCE: bool = false;
     pub const WORKSTATION_ID: Option<String> = None;

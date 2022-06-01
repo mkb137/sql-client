@@ -5,6 +5,7 @@ impl DbConnectionStringKeywords {
     pub const APPLICATION_INTENT: &'static str = "Application Intent";
     pub const APPLICATION_NAME: &'static str = "Application Name";
     pub const ATTACH_DB_FILENAME: &'static str = "AttachDbFilename";
+    pub const ATTESTATION_PROTOCOL: &'static str = "Attestation Protocol";
     pub const AUTHENTICATION: &'static str = "Authentication";
     pub const COLUMN_ENCRYPTION_SETTING: &'static str = "Column Encryption Setting";
     pub const CONNECT_RETRY_COUNT: &'static str = "Connect Retry Count";
@@ -48,6 +49,7 @@ impl DbConnectionStringKeywordsLower {
     pub const APPLICATION_NAME: &'static str = "application name";
     pub const APPLICATION_NAME_ALT: &'static str = "app";
     pub const ATTACH_DB_FILENAME: &'static str = "attachdbfilename";
+    pub const ATTESTATION_PROTOCOL: &'static str = "attestation protocol";
     pub const ATTACH_DB_FILENAME_ALT: &'static str = "initial file name";
     pub const AUTHENTICATION: &'static str = "authentication";
     pub const COLUMN_ENCRYPTION_SETTING: &'static str = "column encryption setting";

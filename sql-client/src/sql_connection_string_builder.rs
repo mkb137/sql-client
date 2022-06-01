@@ -831,7 +831,7 @@ impl Default for SqlConnectionStringBuilder {
             pooling: DbConnectionStringDefaults::POOLING,
             pool_blocking_period: DbConnectionStringDefaults::POOL_BLOCKING_PERIOD,
             replication: DbConnectionStringDefaults::REPLICATION,
-            transaction_binding: DbConnectionStringDefaults::TRANSACTION_BINDING.to_string(),
+            transaction_binding: DbConnectionStringDefaults::TRANSACTION_BINDING_STR.to_string(),
             type_system_version: DbConnectionStringDefaults::TYPE_SYSTEM_VERSION.to_string(),
             user_id: DbConnectionStringDefaults::USER_ID,
             workstation_id: DbConnectionStringDefaults::WORKSTATION_ID,
