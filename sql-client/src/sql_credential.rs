@@ -14,20 +14,20 @@ impl SqlCredential {
     /// Creates a new SQL credential given a username and password.
     pub fn new(user_id: String, password: SecStr) -> Result<Self, SqlClientError> {
         // If the user ID is too long, return an error.
-        if user_id.len() > super::tds_enums::login_validation_rules::MAXLEN_CLIENTID {
+        if user_id.len() > super::tds_enums::LoginValidationRules::MAXLEN_CLIENTID {
             return Err(SqlClientError::InvalidArgumentLength(
                 "user_id".to_string(),
                 user_id,
-                super::tds_enums::login_validation_rules::MAXLEN_CLIENTID,
+                super::tds_enums::LoginValidationRules::MAXLEN_CLIENTID,
             ));
         }
         // If the password is too long, return an error.
         let password_length = password.unsecure().len();
-        if password_length > super::tds_enums::login_validation_rules::MAXLEN_CLIENTID {
+        if password_length > super::tds_enums::LoginValidationRules::MAXLEN_CLIENTID {
             return Err(SqlClientError::InvalidArgumentLength(
                 "password".to_string(),
                 "(redacted)".to_string(),
-                super::tds_enums::login_validation_rules::MAXLEN_CLIENTSECRET,
+                super::tds_enums::LoginValidationRules::MAXLEN_CLIENTSECRET,
             ));
         }
         // Return a new credential
