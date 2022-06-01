@@ -21,7 +21,7 @@ impl TryFrom<&str> for SqlConnectionAttestationProtocol {
             _ => {
                 log::warn!("Unsupported attestation protocol {:?}", value);
                 Err(SqlClientError::UnsupportedValue(
-                    "SqlClientError".to_string(),
+                    "Attestation Protocol".to_string(),
                     value.to_string(),
                 ))
             }
