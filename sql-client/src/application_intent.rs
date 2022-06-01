@@ -19,7 +19,7 @@ impl TryFrom<&str> for ApplicationIntent {
             _ => {
                 log::warn!("Unsupported application intent {:?}", value);
                 Err(SqlClientError::UnsupportedValue(
-                    "SqlClientError".to_string(),
+                    "ApplicationIntent".to_string(),
                     value.to_string(),
                 ))
             }

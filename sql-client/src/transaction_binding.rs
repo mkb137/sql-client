@@ -23,7 +23,7 @@ impl TryFrom<&str> for TransactionBinding {
             _ => {
                 log::warn!("Unsupported transaction binding {:?}", value);
                 Err(SqlClientError::UnsupportedValue(
-                    "SqlClientError".to_string(),
+                    "Transaction Binding".to_string(),
                     value.to_string(),
                 ))
             }

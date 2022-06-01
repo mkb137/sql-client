@@ -35,7 +35,7 @@ impl TryFrom<&str> for TypeSystem {
             _ => {
                 log::warn!("Unsupported type system version {:?}", value);
                 Err(SqlClientError::UnsupportedValue(
-                    "SqlClientError".to_string(),
+                    "Type System".to_string(),
                     value.to_string(),
                 ))
             }

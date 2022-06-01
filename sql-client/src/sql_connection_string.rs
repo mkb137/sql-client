@@ -559,3 +559,296 @@ impl TryFrom<&str> for SqlConnectionString {
         Ok(sql_connection_string)
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    pub fn test_parse_application_intent() {
+        let connection_string: SqlConnectionString =
+            "Application Intent=ReadWrite".try_into().unwrap();
+        assert_eq!(
+            ApplicationIntent::ReadWrite,
+            connection_string.application_intent
+        )
+    }
+
+    #[test]
+    pub fn test_parse_application_name() {
+        let connection_string: SqlConnectionString =
+            "Application Name=Some App".try_into().unwrap();
+        assert_eq!("Some App".to_string(), connection_string.application_name)
+    }
+
+    #[test]
+    pub fn test_parse_attach_db_filename() {
+        let connection_string: SqlConnectionString =
+            "AttachDbFilename=SomeFile".try_into().unwrap();
+        assert_eq!(
+            Some("SomeFile".to_string()),
+            connection_string.attach_db_filename
+        )
+    }
+
+    #[test]
+    pub fn test_parse_attestation_protocol() {
+        let connection_string: SqlConnectionString = "Attestation Protocol=AAS".try_into().unwrap();
+        assert_eq!(
+            SqlConnectionAttestationProtocol::AAS,
+            connection_string.attestation_protocol
+        )
+    }
+
+    #[test]
+    pub fn test_parse_auth_type() {
+        let connection_string: SqlConnectionString =
+            "Authentication=SqlPassword".try_into().unwrap();
+        assert_eq!(
+            SqlAuthenticationMethod::SqlPassword,
+            connection_string.auth_type
+        )
+    }
+
+    #[test]
+    pub fn test_parse_column_encryption_setting() {
+        let connection_string: SqlConnectionString =
+            "Column Encryption Setting=Enabled".try_into().unwrap();
+        assert_eq!(
+            SqlConnectionColumnEncryptionSetting::Enabled,
+            connection_string.column_encryption_setting
+        )
+    }
+
+    #[test]
+    pub fn test_parse_connect_retry_count() {
+        let connection_string: SqlConnectionString = "Connect Retry Count=111".try_into().unwrap();
+        assert_eq!(111u8, connection_string.connect_retry_count)
+    }
+
+    #[test]
+    pub fn test_parse_connect_retry_interval() {
+        let connection_string: SqlConnectionString =
+            "Connect Retry Interval=22".try_into().unwrap();
+        assert_eq!(22u8, connection_string.connect_retry_interval)
+    }
+
+    #[test]
+    pub fn test_parse_connect_timeout() {
+        let connection_string: SqlConnectionString = "Connect Timeout=33".try_into().unwrap();
+        assert_eq!(33u16, connection_string.connect_timeout)
+    }
+
+    #[test]
+    pub fn test_parse_command_timeout() {
+        let connection_string: SqlConnectionString = "Command Timeout=44".try_into().unwrap();
+        assert_eq!(44u16, connection_string.command_timeout)
+    }
+
+    #[test]
+    pub fn test_parse_current_language() {
+        let connection_string: SqlConnectionString = "Current Language=English".try_into().unwrap();
+        assert_eq!(
+            Some("English".to_string()),
+            connection_string.current_language
+        )
+    }
+
+    #[test]
+    pub fn test_parse_data_source() {
+        let connection_string: SqlConnectionString =
+            "Data Source=(localdb)\\SOME_NAME".try_into().unwrap();
+        assert_eq!(
+            Some("(localdb)\\SOME_NAME".to_string()),
+            connection_string.data_source
+        );
+        assert_eq!(
+            Some("SOME_NAME".to_string()),
+            connection_string.local_db_instance
+        );
+    }
+
+    #[test]
+    pub fn test_parse_enclave_attestation_url() {
+        let connection_string: SqlConnectionString = "Attestation Protocol=HGS".try_into().unwrap();
+        assert_eq!(
+            SqlConnectionAttestationProtocol::HGS,
+            connection_string.attestation_protocol
+        )
+    }
+
+    #[test]
+    pub fn test_parse_encrypt() {
+        let connection_string: SqlConnectionString = "Encrypt=Yes".try_into().unwrap();
+        assert_eq!(true, connection_string.encrypt)
+    }
+
+    #[test]
+    pub fn test_parse_enlist() {
+        let connection_string: SqlConnectionString = "Enlist=Yes".try_into().unwrap();
+        assert_eq!(true, connection_string.enlist)
+    }
+
+    #[test]
+    pub fn test_parse_failover_partner() {
+        let connection_string: SqlConnectionString = "Failover Partner=fp".try_into().unwrap();
+        assert_eq!(Some("fp".to_string()), connection_string.failover_partner)
+    }
+
+    #[test]
+    pub fn test_parse_initial_catalog() {
+        let connection_string: SqlConnectionString = "Initial Catalog=SomeDb".try_into().unwrap();
+        assert_eq!(
+            Some("SomeDb".to_string()),
+            connection_string.initial_catalog
+        )
+    }
+
+    #[test]
+    pub fn test_parse_integrated_security() {
+        let connection_string: SqlConnectionString = "Integrated Security=Yes".try_into().unwrap();
+        assert_eq!(true, connection_string.integrated_security)
+    }
+
+    #[test]
+    pub fn test_parse_ip_address_preference() {
+        let connection_string: SqlConnectionString =
+            "IP Address Preference=IPv6First".try_into().unwrap();
+        assert_eq!(
+            SqlConnectionIpAddressPreference::IPv6First,
+            connection_string.ip_address_preference
+        )
+    }
+
+    #[test]
+    pub fn test_parse_load_balance_timeout() {
+        let connection_string: SqlConnectionString = "Load Balance Timeout=55".try_into().unwrap();
+        assert_eq!(55u16, connection_string.load_balance_timeout)
+    }
+
+    #[test]
+    pub fn test_parse_max_pool_size() {
+        let connection_string: SqlConnectionString = "Max Pool Size=11".try_into().unwrap();
+        assert_eq!(11u8, connection_string.max_pool_size)
+    }
+
+    #[test]
+    pub fn test_parse_min_pool_size() {
+        let connection_string: SqlConnectionString = "Min Pool Size=2".try_into().unwrap();
+        assert_eq!(2u8, connection_string.min_pool_size)
+    }
+
+    #[test]
+    pub fn test_parse_multiple_active_result_sets() {
+        let connection_string: SqlConnectionString =
+            "Multiple Active Result Sets=Yes".try_into().unwrap();
+        assert_eq!(true, connection_string.multiple_active_result_sets)
+    }
+
+    #[test]
+    pub fn test_parse_multi_subnet_failover() {
+        let connection_string: SqlConnectionString =
+            "Multi Subnet Failover=Yes".try_into().unwrap();
+        assert_eq!(true, connection_string.multi_subnet_failover)
+    }
+
+    #[test]
+    pub fn test_parse_packet_size() {
+        let connection_string: SqlConnectionString = "Packet Size=123".try_into().unwrap();
+        assert_eq!(123u16, connection_string.packet_size)
+    }
+
+    #[test]
+    pub fn test_parse_password() {
+        let connection_string: SqlConnectionString = "Password=abc123".try_into().unwrap();
+        assert_eq!(Some(SecStr::from("abc123")), connection_string.password)
+    }
+
+    #[test]
+    pub fn test_parse_persist_security_info() {
+        let connection_string: SqlConnectionString =
+            "Persist Security Info=Yes".try_into().unwrap();
+        assert_eq!(true, connection_string.persist_security_info)
+    }
+
+    #[test]
+    pub fn test_parse_pooling() {
+        let connection_string: SqlConnectionString =
+            "Application Intent=ReadWrite".try_into().unwrap();
+        assert_eq!(
+            ApplicationIntent::ReadWrite,
+            connection_string.application_intent
+        )
+    }
+
+    #[test]
+    pub fn test_parse_pool_blocking_period() {
+        let connection_string: SqlConnectionString = "Pooling=Yes".try_into().unwrap();
+        assert_eq!(true, connection_string.pooling)
+    }
+
+    #[test]
+    pub fn test_parse_replication() {
+        let connection_string: SqlConnectionString = "Replication=Yes".try_into().unwrap();
+        assert_eq!(true, connection_string.replication)
+    }
+
+    #[test]
+    pub fn test_parse_transaction_binding() {
+        let connection_string: SqlConnectionString =
+            "Transaction Binding=Explicit Unbind".try_into().unwrap();
+        assert_eq!(
+            TransactionBinding::ExplicitUnbind,
+            connection_string.transaction_binding
+        )
+    }
+
+    #[test]
+    pub fn test_parse_trust_server_certificate() {
+        let connection_string: SqlConnectionString =
+            "Trust Server Certificate=Yes".try_into().unwrap();
+        assert_eq!(true, connection_string.trust_server_certificate)
+    }
+
+    #[test]
+    pub fn test_parse_type_system_version() {
+        let connection_string: SqlConnectionString =
+            "Type System Version=SQL Server 2005".try_into().unwrap();
+        assert_eq!(
+            TypeSystem::SqlServer2005,
+            connection_string.type_system_assembly_version
+        );
+        assert_eq!(
+            "SQL Server 2005".to_string(),
+            connection_string.type_system_version
+        );
+    }
+
+    #[test]
+    pub fn test_parse_user_id() {
+        let connection_string: SqlConnectionString = "User ID=Some User".try_into().unwrap();
+        assert_eq!(Some("Some User".to_string()), connection_string.user_id)
+    }
+
+    #[test]
+    pub fn test_parse_user_instance() {
+        let connection_string: SqlConnectionString = "User Instance=True".try_into().unwrap();
+        assert_eq!(true, connection_string.user_instance)
+    }
+
+    #[test]
+    pub fn test_parse_workstation_id() {
+        let connection_string: SqlConnectionString =
+            "Application Intent=ReadWrite".try_into().unwrap();
+        assert_eq!(
+            ApplicationIntent::ReadWrite,
+            connection_string.application_intent
+        )
+    }
+
+    #[test]
+    pub fn test_parse_expanded_attach_db_filename() {
+        let connection_string: SqlConnectionString = "Workstation ID=ABC".try_into().unwrap();
+        assert_eq!(Some("ABC".to_string()), connection_string.workstation_id)
+    }
+}

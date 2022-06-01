@@ -33,10 +33,10 @@ impl DbConnectionStringKeywords {
     pub const POOLING: &'static str = "Pooling";
     pub const REPLICATION: &'static str = "Replication";
     pub const TRANSACTION_BINDING: &'static str = "Transaction Binding";
-    pub const TYPE_SYSTEM_VERSION: &'static str = "Type System Version";
     pub const TRUST_SERVER_CERTIFICATE: &'static str = "Trust Server Certificate";
-    pub const USER_INSTANCE: &'static str = "User Instance";
+    pub const TYPE_SYSTEM_VERSION: &'static str = "Type System Version";
     pub const USER_ID: &'static str = "User ID";
+    pub const USER_INSTANCE: &'static str = "User Instance";
     pub const WORKSTATION_ID: &'static str = "Workstation ID";
 }
 
