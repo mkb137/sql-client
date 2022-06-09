@@ -1,8 +1,10 @@
 //! SQL Server login credentials (username and password).
 use crate::sql_client_error::SqlClientError;
+use crate::sql_connection::SqlConnection;
 use secstr::SecStr;
 
 /// User login credentials.
+#[derive(Clone)]
 pub struct SqlCredential {
     /// The user's ID.
     user_id: String,

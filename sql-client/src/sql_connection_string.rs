@@ -3,6 +3,7 @@ use crate::db_connection_string_keywords::DbConnectionStringKeywordsLower;
 use crate::db_connection_string_utils::{
     convert_to_boolean, convert_to_integrated_security, get_local_db_instance_name_from_server_name,
 };
+use crate::sql_credential::SqlCredential;
 use crate::{
     ApplicationIntent, PoolBlockingPeriod, SqlAuthenticationMethod, SqlClientError,
     SqlConnectionAttestationProtocol, SqlConnectionColumnEncryptionSetting,
@@ -270,6 +271,22 @@ impl SqlConnectionString {
     /// The name of the workstation connecting to SQL Server.
     pub fn workstation_id(&self) -> Option<String> {
         self.workstation_id.clone()
+    }
+
+    /// The SQL credentials, if there's a user ID and password
+    pub fn sql_credential(&self) -> Result<Option<SqlCredential>, SqlClientError> {
+        // Check the user ID and password that may have been provided in the connection string.
+        match (self.user_id(), self.password()) {
+            // If we have both a user ID and password...
+            (Some(user_id), Some(password)) => {
+                // Try to create credentials.
+                let sql_credential = SqlCredential::new(user_id, password)?;
+                // If successful, return them.
+                Ok(Some(sql_credential))
+            }
+            // If we don't have both username and password, return an error.
+            _ => Ok(None),
+        }
     }
 }
 
