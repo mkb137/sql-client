@@ -3,7 +3,7 @@ use crate::sql_client_error::SqlClientError;
 use crate::sql_connection::SqlConnection;
 use secstr::SecStr;
 
-/// User login credentials.
+/// User login credentials consisting of a user name and password.
 #[derive(Clone)]
 pub struct SqlCredential {
     /// The user's ID.

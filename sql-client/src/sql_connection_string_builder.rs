@@ -1,6 +1,3 @@
-//! Creates a SQL connection string.
-//!
-//!
 use super::db_connection_string_defaults::DbConnectionStringDefaults;
 use super::db_connection_string_keywords::{
     DbConnectionStringKeywords, DbConnectionStringKeywordsLower,
@@ -91,7 +88,18 @@ fn append_opt(connection_string: &mut String, keyword: &str, value: Option<Strin
     }
 }
 
+
+/// A utility struct for creating well-formatted and valid SQL connection strings.
 ///
+/// # Examples
+///
+/// ```
+/// use sql_client::SqlConnectionStringBuilder;
+/// let mut builder = SqlConnectionStringBuilder::default();
+/// builder.set_initial_catalog(Some("MyDb".to_string()));
+/// builder.set_data_source(Some("server_name".to_string()));
+/// assert_eq!("Data Source=server_name;Initial Catalog=MyDb".to_string(), builder.connection_string());
+/// ```
 pub struct SqlConnectionStringBuilder {
     /// Declares the application workload type when connecting to a database in an SQL Server Availability Group.
     application_intent: ApplicationIntent,

@@ -41,7 +41,11 @@ pub(crate) use sql_connection_attestation_protocol::SqlConnectionAttestationProt
 #[doc(inline)]
 pub use sql_connection_ip_address_preference::SqlConnectionIpAddressPreference;
 #[doc(inline)]
+pub use sql_connection::SqlConnection;
+#[doc(inline)]
 pub use sql_connection_string_builder::SqlConnectionStringBuilder;
+#[doc(inline)]
+pub use sql_credential::SqlCredential;
 #[doc(inline)]
 pub(crate) use transaction_binding::{TransactionBinding, TransactionBindingKeywords};
 #[doc(inline)]

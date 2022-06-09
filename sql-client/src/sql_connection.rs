@@ -25,7 +25,7 @@ impl SqlConnection {
             sql_credential,
         })
     }
-    /// Tries to create a new connection given a connection string and credentials.
+    /// Tries to create a new connection given a connection string and login credentials.
     pub fn new_auth(
         connection_string: &str,
         sql_credential: SqlCredential,
@@ -40,6 +40,9 @@ impl SqlConnection {
         })
     }
 }
+/// Allows the SQL connection to be cloned.
+///
+/// The properties are cloned but not the state (e.g. is the connection open).
 impl Clone for SqlConnection {
     /// Clones the connection.
     fn clone(&self) -> Self {
