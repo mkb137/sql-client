@@ -24,6 +24,7 @@ mod test_init;
 mod transaction;
 mod transaction_binding;
 mod type_system;
+pub(crate) mod sql_retry_interval;
 
 // Re-exports
 #[doc(inline)]

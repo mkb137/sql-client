@@ -32,6 +32,7 @@ impl SqlConnection {
     ) -> Result<Self, SqlClientError> {
         // Create the connection string object
         let connection_options: SqlConnectionString = connection_string.try_into()?;
+        // TODO - The .NET implementation will throw errors if a credential is used in connection with certain other settings.
         // Return the connection string
         Ok(Self {
             connection_string: connection_string.to_string(),
@@ -42,7 +43,7 @@ impl SqlConnection {
 }
 /// Allows the SQL connection to be cloned.
 ///
-/// The properties are cloned but not the state (e.g. is the connection open).
+/// The properties are cloned but not the state (e.g. the resulting connection will be closed even if the original connection was open).
 impl Clone for SqlConnection {
     /// Clones the connection.
     fn clone(&self) -> Self {
