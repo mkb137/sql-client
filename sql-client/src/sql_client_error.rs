@@ -13,10 +13,10 @@ pub enum SqlClientError {
     UnsupportedKeyword(String),
     /// An argument was null.
     #[error("A value was not supplied for the argument {0}")]
-    ArgumentNull(String),
+    ArgumentNull(String,String),
     /// An argument was null.
-    #[error("A value for argument {0} is out of range.")]
-    ArgumentOutOfRange(String),
+    #[error("A value for argument {0} is out of range: {1}")]
+    ArgumentOutOfRange(String,String),
     /// The length of an argument was valid (i.e. a string was too long).
     #[error("The value '{1}' supplied for argument {0} was greater than length {2}")]
     InvalidArgumentLength(String, String, usize),
