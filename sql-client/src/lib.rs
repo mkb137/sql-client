@@ -10,6 +10,7 @@ pub(crate) mod db_connection_string_defaults;
 pub(crate) mod db_connection_string_keywords;
 pub(crate) mod db_connection_string_utils;
 pub mod pool_blocking_period;
+mod retry_enumerators;
 pub mod sql_authentication_method;
 pub mod sql_client_error;
 pub mod sql_column_encryption_setting;
@@ -24,7 +25,6 @@ mod test_init;
 mod transaction;
 mod transaction_binding;
 mod type_system;
-pub(crate) mod sql_retry_interval;
 
 // Re-exports
 #[doc(inline)]
@@ -38,11 +38,11 @@ pub use sql_client_error::SqlClientError;
 #[doc(inline)]
 pub use sql_column_encryption_setting::SqlConnectionColumnEncryptionSetting;
 #[doc(inline)]
+pub use sql_connection::SqlConnection;
+#[doc(inline)]
 pub(crate) use sql_connection_attestation_protocol::SqlConnectionAttestationProtocol;
 #[doc(inline)]
 pub use sql_connection_ip_address_preference::SqlConnectionIpAddressPreference;
-#[doc(inline)]
-pub use sql_connection::SqlConnection;
 #[doc(inline)]
 pub use sql_connection_string_builder::SqlConnectionStringBuilder;
 #[doc(inline)]
