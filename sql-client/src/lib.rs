@@ -11,6 +11,7 @@ pub(crate) mod db_connection_string_keywords;
 pub(crate) mod db_connection_string_utils;
 pub mod pool_blocking_period;
 mod retry_enumerators;
+mod retry_enumerators2;
 pub mod sql_authentication_method;
 pub mod sql_client_error;
 pub mod sql_column_encryption_setting;
